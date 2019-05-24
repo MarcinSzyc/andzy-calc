@@ -1,3 +1,6 @@
 /venv
 .idea
-/__pycache__
+**/__pycache__
+**/**/__pycache__
+**/__pycache__/**
+andzy_calc/__pycache__/*
