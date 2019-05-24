@@ -1,0 +1,6 @@
+{% extends 'renovations/layout.html' %}
+{% block renovations %}
+    {% for product in object_list %}
+        <li>{{ product.name }}</li>
+    {% endfor %}
+{% endblock renovations %}
