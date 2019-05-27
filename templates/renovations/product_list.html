@@ -1,6 +1,89 @@
 {% extends 'renovations/layout.html' %}
+{% load crispy_forms_tags %}
 {% block renovations %}
-    {% for product in object_list %}
-        <li>{{ product.name }}</li>
-    {% endfor %}
+    {% if messages %}
+        {% for message in messages %}
+            <div{% if message.tags == 'error' %}
+                class="alert alert-danger" role="alert"
+            {% else %}
+                class="alert alert-success" role="alert"
+            {% endif %}>{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+    <div class="row justify-content-md-center main-window">
+        <div class="col-sm-auto">
+            <div class="card">
+                <div class="card-body">
+                    <a class="btn btn-outline-info btn-sm new-product" href="#">Add Product</a>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <td>Product name</td>
+                                <td>Product description</td>
+                                <td>Product type</td>
+                                <td>Actions</td>
+                            </tr>
+                            </thead>
+                            {% for product in object_list %}
+                                <tr>
+                                    <td>{{ product.name }}</td>
+                                    <td>{{ product.description }}</td>
+                                    <td>{{ product.type }}</td>
+                                    <td><a href="{% url 'renovations:update-product' pk=product.id %}"
+                                           class="btn btn-outline-warning btn-sm">Modify</a>
+                                        <a href="{% url 'renovations:delete-product' pk=product.id %}"
+                                           class="btn btn-outline-danger btn-sm">Remove</a></td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function () {
+            new_product_card = $(`
+            <div class="row justify-content-md-center new-product-box">
+                <div class="col-sm-auto">
+                    <div class="card">
+                        <div class="card-body">
+                            <h3>Add Product</h3>
+                            <form action="{% url 'renovations:new-product' %}" method="POST">
+                                {% csrf_token %}
+                                {{ new_product_form | crispy }}
+                                <button type="submit" class="btn btn-secondary">Save</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                `);
+
+            {#function add_box(type, card) {#}
+            {#    console.log("dupa")#}
+            {#    var main_window = $(".main-window")#}
+            {#    if (main_window.hasClass(type)) {#}
+            {#        $(`.${type}-box`).remove()#}
+            {#        main_window.removeClass(type)#}
+            {#    } else {#}
+            {#        main_window.append(card)#}
+            {#        main_window.addClass(type)#}
+            {#    }#}
+
+
+            $(".new-product").click(function (e) {
+                var main_window = $(".main-window")
+                if (main_window.hasClass('new-box-added')) {
+                    $(".new-product-box").remove()
+                    main_window.removeClass('new-box-added')
+                } else {
+                    main_window.parent().prepend(new_product_card)
+                    main_window.addClass('new-box-added')
+                }
+            })
+        })
+    </script>
+
 {% endblock renovations %}
