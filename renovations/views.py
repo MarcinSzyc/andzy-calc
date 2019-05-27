@@ -28,9 +28,11 @@ class ProductNew(SuccessMessageMixin, CreateView):
     success_message = 'BOOM! Product created successfully!!'
 
 
-class ProductUpdate(UpdateView):
+class ProductUpdate(SuccessMessageMixin, UpdateView):
     model = Product
-    fields = ['__all__']
+    fields = ['name', 'description', 'type']
+    success_url = reverse_lazy('renovations:all-products')
+    success_message = 'BOOM! Product updated successfully!!'
 
 
 class ProductDelete(View):
