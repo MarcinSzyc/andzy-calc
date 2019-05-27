@@ -11,12 +11,12 @@
         {% endfor %}
     {% endif %}
     <div class="row justify-content-md-center main-window">
-        <div class="col-sm-auto">
-            <div class="card">
+        <div class="col-sm-12">
+            <div class="card mt-3">
                 <div class="card-body">
-                    <a class="btn btn-outline-info btn-sm new-product" href="#">Add Product</a>
+                    <a class="new-product btn btn-outline-info btn-sm " href="#">Add Product</a>
                     <div class="table-responsive">
-                        <table class="table">
+                        <table class="table mt-3">
                             <thead>
                             <tr>
                                 <td>Product name</td>
@@ -26,12 +26,14 @@
                             </tr>
                             </thead>
                             {% for product in object_list %}
-                                <tr>
-                                    <td>{{ product.name }}</td>
-                                    <td>{{ product.description }}</td>
-                                    <td>{{ product.type }}</td>
-                                    <td><a href="{% url 'renovations:update-product' pk=product.id %}"
-                                           class="btn btn-outline-warning btn-sm">Modify</a>
+                                <tr class="product-row">
+                                    <td id="product-name-{{ product.id }}">{{ product.name }}</td>
+                                    <td id="product-description-{{ product.id }}">{{ product.description }}</td>
+                                    <td id="product-type-{{ product.id }}">{{ product.type }}</td>
+                                    <td>
+                                        <a class="edit-product btn btn-outline-warning btn-sm"
+                                           data-id={{ product.id }} href="#"
+                                        >Modify</a>
                                         <a href="{% url 'renovations:delete-product' pk=product.id %}"
                                            class="btn btn-outline-danger btn-sm">Remove</a></td>
                                 </tr>
@@ -45,9 +47,8 @@
     <script>
         $(document).ready(function () {
             new_product_card = $(`
-            <div class="row justify-content-md-center new-product-box">
-                <div class="col-sm-auto">
-                    <div class="card">
+                <div class="col-sm-auto new-product-box">
+                    <div class="card mt-3">
                         <div class="card-body">
                             <h3>Add Product</h3>
                             <form action="{% url 'renovations:new-product' %}" method="POST">
@@ -58,8 +59,22 @@
                         </div>
                     </div>
                 </div>
-            </div>
-                `);
+            `);
+
+            edit_product_card = $(`
+                <div class="col-sm-auto edit-product-box">
+                    <div class="card mt-3">
+                        <div class="card-body">
+                            <h3>Modify Product</h3>
+                            <form class="update-form" action="" method="POST">
+                                {% csrf_token %}
+                                {{ new_product_form | crispy }}
+                                <button type="submit" class="btn btn-secondary">Save</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            `);
 
             {#function add_box(type, card) {#}
             {#    console.log("dupa")#}
@@ -73,14 +88,41 @@
             {#    }#}
 
 
-            $(".new-product").click(function (e) {
-                var main_window = $(".main-window")
+            $(".new-product").click(function () {
+                var main_window = $(".main-window");
                 if (main_window.hasClass('new-box-added')) {
-                    $(".new-product-box").remove()
-                    main_window.removeClass('new-box-added')
+                    $(".new-product-box").remove().show('slow');
+                    main_window.removeClass('new-box-added');
                 } else {
-                    main_window.parent().prepend(new_product_card)
-                    main_window.addClass('new-box-added')
+                    main_window.prepend(new_product_card).hide().show('slow');
+                    main_window.addClass('new-box-added');
+                }
+            })
+
+            function add_form_action(id) {
+                $(".update-form").attr("action", `/renovations/products/update/${id}/`)
+            }
+
+            function fill_edit_form(id) {
+                var product_name = $(`#product-name-${id}`).text()
+                var product_description = $(`#product-description-${id}`).text()
+                var product_type = $(`#product-type-${id}`).text()
+                $("form.update-form > #div_id_name > .controls > #id_name").val(product_name)
+                $("form.update-form > #div_id_description > .controls > #id_description").val(product_description)
+                $("form.update-form > #div_id_type > .controls > #id_type").val(product_type)
+            }
+
+            $(".edit-product").click(function () {
+                var main_window = $(".main-window");
+                var product_id = $(this).data("id");
+                if (main_window.hasClass('edit-box-added')) {
+                    $(".edit-product-box").remove().show('slow');
+                    main_window.removeClass('edit-box-added');
+                } else {
+                    main_window.prepend(edit_product_card).hide().show('slow');
+                    main_window.addClass('edit-box-added');
+                    add_form_action(product_id);
+                    fill_edit_form(product_id);
                 }
             })
         })
