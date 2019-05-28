@@ -4,21 +4,24 @@
     {% if messages %}
         {% for message in messages %}
             <div{% if message.tags == 'error' %}
-                class="alert alert-danger" role="alert"
+                class="alert alert-danger border-warning mt-3" role="alert"
             {% else %}
-                class="alert alert-success" role="alert"
+                class="alert alert-success border-success mt-3" role="alert"
             {% endif %}>{{ message }}</div>
         {% endfor %}
     {% endif %}
     <div class="row justify-content-md-center main-window">
         <div class="col-sm-12">
-            <div class="card mt-3">
+            <div class="card mt-3 bg-light border-danger">
                 <div class="card-body">
-                    <a class="new-product btn btn-outline-info btn-sm " href="#">Add Product</a>
                     <div class="table-responsive">
                         <table class="table mt-3">
                             <thead>
-                            <tr>
+                            <span style="display: inline">
+                                <a class="new-product btn btn-outline-info btn-sm" href="#">Add Product</a>
+                                <h1 style="text-align: center">Product List:</h1>
+                            </span>
+                            <tr style="font-size: large; font-style: oblique; font-weight: bold">
                                 <td>Product name</td>
                                 <td>Product description</td>
                                 <td>Product type</td>
@@ -48,13 +51,13 @@
         $(document).ready(function () {
             new_product_card = $(`
                 <div class="col-sm-auto new-product-box">
-                    <div class="card mt-3">
+                    <div class="card mt-3 border-info bg-light">
                         <div class="card-body">
-                            <h3>Add Product</h3>
+                            <h3 class="text-info">Add Product</h3>
                             <form action="{% url 'renovations:new-product' %}" method="POST">
                                 {% csrf_token %}
                                 {{ new_product_form | crispy }}
-                                <button type="submit" class="btn btn-secondary">Save</button>
+                                <button type="submit" class="btn btn-info mt-3">Save</button>
                             </form>
                         </div>
                     </div>
@@ -63,13 +66,13 @@
 
             edit_product_card = $(`
                 <div class="col-sm-auto edit-product-box">
-                    <div class="card mt-3">
+                    <div class="card mt-3 border-warning bg-light">
                         <div class="card-body">
-                            <h3>Modify Product</h3>
+                            <h3 class="text-warning">Modify Product</h3>
                             <form class="update-form" action="" method="POST">
                                 {% csrf_token %}
                                 {{ new_product_form | crispy }}
-                                <button type="submit" class="btn btn-secondary">Save</button>
+                                <button type="submit" class="btn btn-warning mt-3">Save</button>
                             </form>
                         </div>
                     </div>
