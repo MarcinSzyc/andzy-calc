@@ -1,5 +1,5 @@
 from django.views.generic import ListView, View
-from renovations.models import Product
+from renovations.models import Product, PRODUCT_TYPE
 from django.views.generic.edit import CreateView, UpdateView, BaseDeleteView
 from django.urls import reverse_lazy
 from django.contrib.messages.views import SuccessMessageMixin
@@ -16,7 +16,8 @@ class AllProducts(ListView):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
         # Add in the publisher
-        context['new_product_form'] = NewProductForm
+        # context['new_product_form'] = NewProductForm
+        context['PRODUCT_TYPE'] = PRODUCT_TYPE
         return context
 
 

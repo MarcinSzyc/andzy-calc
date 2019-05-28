@@ -32,7 +32,14 @@
                                 <tr class="product-row">
                                     <td id="product-name-{{ product.id }}">{{ product.name }}</td>
                                     <td id="product-description-{{ product.id }}">{{ product.description }}</td>
-                                    <td id="product-type-{{ product.id }}">{{ product.type }}</td>
+                                    <td id="product-type-{{ product.id }}">
+                                        {% for item in PRODUCT_TYPE %}
+                                            {% if item.0 == product.type %}
+                                                {{ item.1 }}
+                                            {% else %}
+                                            {% endif %}
+                                        {% endfor %}
+                                    </td>
                                     <td>
                                         <a class="edit-product btn btn-outline-warning btn-sm"
                                            data-id={{ product.id }} href="#"
