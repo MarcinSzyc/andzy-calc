@@ -21,10 +21,11 @@
                                 <a class="new-product btn btn-outline-info btn-sm" href="#">Add Product</a>
                                 <h1 style="text-align: center">Product List:</h1>
                             </span>
-                            <tr style="font-size: large; font-style: oblique; font-weight: bold">
-                                <td>Product name</td>
-                                <td>Product description</td>
-                                <td>Product type</td>
+                            <tr class="product-head-list">
+                                <td>Name</td>
+                                <td>Description</td>
+                                <td>Price</td>
+                                <td>Type</td>
                                 <td>Actions</td>
                             </tr>
                             </thead>
@@ -32,7 +33,8 @@
                                 <tr class="product-row">
                                     <td id="product-name-{{ product.id }}">{{ product.name }}</td>
                                     <td id="product-description-{{ product.id }}">{{ product.description }}</td>
-                                    <td id="product-type-{{ product.id }}">
+                                    <td id="product-price-{{ product.id }}">{{ product.price }}</td>
+                                    <td id="product-type-{{ product.id }}" type="{{ product.type }}">
                                         {% for item in PRODUCT_TYPE %}
                                             {% if item.0 == product.type %}
                                                 {{ item.1 }}
@@ -57,7 +59,7 @@
     <script>
         $(document).ready(function () {
             new_product_card = $(`
-                <div class="col-sm-auto new-product-box">
+                <div class="col-sm-4 new-product-box">
                     <div class="card mt-3 border-info bg-light">
                         <div class="card-body">
                             <h3 class="text-info">Add Product</h3>
@@ -72,7 +74,7 @@
             `);
 
             edit_product_card = $(`
-                <div class="col-sm-auto edit-product-box">
+                <div class="col-sm-4 edit-product-box">
                     <div class="card mt-3 border-warning bg-light">
                         <div class="card-body">
                             <h3 class="text-warning">Modify Product</h3>
@@ -116,9 +118,11 @@
             function fill_edit_form(id) {
                 var product_name = $(`#product-name-${id}`).text()
                 var product_description = $(`#product-description-${id}`).text()
-                var product_type = $(`#product-type-${id}`).text()
+                var product_price = $(`#product-price-${id}`).text()
+                var product_type = $(`#product-type-${id}`).attr("type")
                 $("form.update-form > #div_id_name > .controls > #id_name").val(product_name)
                 $("form.update-form > #div_id_description > .controls > #id_description").val(product_description)
+                $("form.update-form > #div_id_price > .controls > #id_price").val(product_price)
                 $("form.update-form > #div_id_type > .controls > #id_type").val(product_type)
             }
 

@@ -1,0 +1,199 @@
+{% extends 'renovations/layout.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block renovations %}
+    {% if messages %}
+        {% for message in messages %}
+            <div{% if message.tags == 'error' %}
+                class="alert alert-danger border-warning mt-3" role="alert"
+            {% else %}
+                class="alert alert-success border-success mt-3" role="alert"
+            {% endif %}>{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+    <div class="row justify-content-md-center main-window">
+        <div class="col-sm-12">
+            <div class="card mt-3 bg-light border-danger">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table mt-3">
+                            <thead>
+                            <span>
+                                <a style="display: inline" class="new-room btn btn-outline-info btn-sm" href="#">Add Room</a>
+                                <h1 style="text-align: center">Room List:</h1>
+                            </span>
+                            <tr style="font-size: large; font-style: oblique; font-weight: bold">
+                                <td>ID:</td>
+                                <td>Name</td>
+                                <td>Description</td>
+                                <td>Type</td>
+                                <td>Renovation</td>
+                                <td>Actions</td>
+                            </tr>
+                            </thead>
+                            {% for room in object_list %}
+                                <tr class="room-row">
+                                    <td id="room-id-{{ room.id }}">{{ room.id }}</td>
+                                    <td id="room-name-{{ room.id }}">{{ room.name }}</td>
+                                    <td id="room-description-{{ room.id }}">{{ room.description }}</td>
+                                    <td id="room-type-{{ room.id }}" type="{{ room.type }}">
+                                        {% for item in ROOM_TYPE %}
+                                            {% if item.0 == room.type %}
+                                                {{ item.1 }}
+                                            {% else %}
+                                            {% endif %}
+                                        {% endfor %}
+                                    </td>
+                                    <td style="display: none" id="room-width-{{ room.id }}">{{ room.width }}</td>
+                                    <td style="display: none" id="room-length-{{ room.id }}">{{ room.length }}</td>
+                                    <td style="display: none" id="room-height-{{ room.id }}">{{ room.height }}</td>
+                                    <td style="display: none"
+                                        id="room-tiles-height-{{ room.id }}">{{ room.tiles_height }}</td>
+                                    <td id="room-renovation-{{ room.id }}">{{ room.renovation }}</td>
+                                    <td>
+{#                                        <a class="details-room btn btn-outline-info btn-sm"#}
+{#                                           data-id={{ room.id }} href="#">Details</a>#}
+                                        <a class="edit-room btn btn-outline-warning btn-sm"
+                                           href="{% url 'renovations:update-room' pk=room.id %}">Modify</a>
+                                        <a href="{% url 'renovations:delete-room' pk=room.id %}"
+                                           class="btn btn-outline-danger btn-sm">Remove</a></td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function () {
+
+            var new_room_card = $(`
+                <div class="col-sm-auto new-room-box">
+                    <div class="card mt-3 border-info bg-light">
+                        <div class="card-body">
+                            <h3 style="text-align: center" class="text-info">Add Room</h3>
+                            <form action="{% url 'renovations:new-room' %}" method="POST">
+                                {% csrf_token %}
+                                <table style="border-spacing: 10px">
+                                    <tr>
+                                        <td style="vertical-align:top">
+                                            <label for="room-name">Name:</label>
+                                            <p id="room-name">{{ new_room_form.name }}</p>
+                                            <label for="room-description">Description:</label>
+                                            <p id="room-name">{{ new_room_form.description }}</p>
+                                            <label for="room-type">Type:</label>
+                                            <p id="room-name">{{ new_room_form.type }}</p>
+                                            <label for="room-renovation">Renovation:</label>
+                                            <p id="room-name">{{ new_room_form.renovation }}</p>
+                                        </td>
+                                        <td style="vertical-align:top">
+                                            <label for="room-width">Width:</label>
+                                            <p id="room-name">{{ new_room_form.width }}</p>
+                                            <label for="room-length">Length:</label>
+                                            <p id="room-name">{{ new_room_form.length }}</p>
+                                            <label for="room-height">Height:</label>
+                                            <p id="room-name">{{ new_room_form.height }}</p>
+                                            <label for="room-tiles-height">Tiles Height:</label>
+                                            <p id="room-name">{{ new_room_form.tiles_height }}</p>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <button type="submit" class="btn btn-info mt-3">Save</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            `);
+
+            {#var edit_room_card = $(`#}
+            {#    <div class="col-sm-auto edit-room-box">#}
+            {#        <div class="card mt-3 border-warning bg-light">#}
+            {#            <div class="card-body">#}
+            {#                <h3 style="text-align: center" class="text-warning">Edit Room</h3>#}
+            {#                <form class="update-form" action="{% url 'renovations:new-room' %}" method="POST">#}
+            {#                    {% csrf_token %}#}
+            {#                    <table style="border-spacing: 10px">#}
+            {#                        <tr class="edit-form-row">#}
+            {#                            <td style="vertical-align:top">#}
+            {#                                <label for="room-name">Name:</label>#}
+            {#                                <p id="room-name">{{ new_room_form.name }}</p>#}
+            {#                                <label for="room-description">Description:</label>#}
+            {#                                <p id="room-description">{{ new_room_form.description }}</p>#}
+            {#                                <label for="room-type">Type:</label>#}
+            {#                                <p id="room-type">{{ new_room_form.type }}</p>#}
+            {#                                <label for="room-renovation">Renovation:</label>#}
+            {#                                <p id="room-renovation">{{ new_room_form.renovation }}</p>#}
+            {#                                <label for="room-renovation">Renovation:</label>#}
+            {#                                <p id="room-renovation">{{ new_room_form.renovation }}</p>#}
+            {#                            </td>#}
+            {#                            <td style="vertical-align:top">#}
+            {#                                <label for="room-width">Width:</label>#}
+            {#                                <p id="room-width">{{ new_room_form.width }}</p>#}
+            {#                                <label for="room-length">Length:</label>#}
+            {#                                <p id="room-length">{{ new_room_form.length }}</p>#}
+            {#                                <label for="room-height">Height:</label>#}
+            {#                                <p id="room-height">{{ new_room_form.height }}</p>#}
+            {#                                <label for="room-tiles-height">Tiles Height:</label>#}
+            {#                                <p id="room-tiles-height">{{ new_room_form.tiles_height }}</p>#}
+            {#                            </td>#}
+            {#                        </tr>#}
+            {#                    </table>#}
+            {#                    <button type="submit" class="btn btn-warning mt-3">Save</button>#}
+            {#                </form>#}
+            {#            </div>#}
+            {#        </div>#}
+            {#    </div>#}
+            {#`);#}
+
+            function add_form_action(id) {
+                $(".update-form").attr("action", `/renovations/rooms/update/${id}/`)
+            }
+
+            {#function fill_edit_form(id) {#}
+            {#    var room_name = $(`#room-name-${id}`).text();#}
+            {#    var room_description = $(`#room-description-${id}`).text();#}
+            {#    var room_price = $(`#room-price-${id}`).text();#}
+            {#    var room_type = $(`#room-type-${id}`).attr("type");#}
+            {#    var room_width = $(`#room-width-${id}`).text();#}
+            {#    var room_length = $(`#room-length-${id}`).text();#}
+            {#    var room_height = $(`#room-height-${id}`).text();#}
+            {#    var room_tiles_height = $(`#room-tiles-height-${id}`).text();#}
+            {#    $(".edit-form-row > td > #room-name > #id_name").val(room_name);#}
+            {#    $(".edit-form-row > td > #room-description > #id_description").val(room_description);#}
+            {#    $(".edit-form-row > td > #room-price > #id_price").val(room_price);#}
+            {#    $(".edit-form-row > td > #room-type > #id_type").val(room_type);#}
+            {#    $(".edit-form-row > td > #room-width > #id_width").val(room_width);#}
+            {#    $(".edit-form-row > td > #room-length > #id_length").val(room_length);#}
+            {#    $(".edit-form-row > td > #room-height > #id_height").val(room_height);#}
+            {#    $(".edit-form-row > td > #room-tiles-height > #id_tiles_height").val(room_tiles_height);#}
+            {#}#}
+            {##}
+            {#$(".edit-room").click(function () {#}
+            {#    var main_window = $(".main-window");#}
+            {#    var room_id = $(this).data("id");#}
+            {#    if (main_window.hasClass('edit-box-added')) {#}
+            {#        $(".edit-room-box").remove();#}
+            {#        main_window.removeClass('edit-box-added');#}
+            {#    } else {#}
+            {#        main_window.prepend(edit_room_card);#}
+            {#        main_window.addClass('edit-box-added');#}
+            {#        add_form_action(room_id);#}
+            {#        fill_edit_form(room_id);#}
+            {#    }#}
+            {#})#}
+
+            $(".new-room").click(function () {
+                var main_window = $(".main-window");
+                if (main_window.hasClass('new-box-added')) {
+                    $(".new-room-box").remove();
+                    main_window.removeClass('new-box-added');
+                } else {
+                    main_window.prepend(new_room_card);
+                    main_window.addClass('new-box-added');
+                }
+            })
+
+        });
+    </script>
+{% endblock renovations %}
