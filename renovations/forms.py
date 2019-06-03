@@ -16,10 +16,10 @@ class NewRoomForm(ModelForm):
         model = Room
         widgets = {
             "description": Textarea(attrs={'rows': 5, 'cols': 20}),
-            "width": NumberInput(attrs={'style': 'width:7em'}),
-            "length": NumberInput(attrs={'style': 'width:7em'}),
-            "height": NumberInput(attrs={'style': 'width:7em'}),
-            "tiles_height": NumberInput(attrs={'style': 'width:7em'}),
+            "width": NumberInput(attrs={'style': 'width:5em'}),
+            "length": NumberInput(attrs={'style': 'width:5em'}),
+            "height": NumberInput(attrs={'style': 'width:5em'}),
+            "tiles_height": NumberInput(attrs={'style': 'width:5em'}),
         }
         exclude = []
 
