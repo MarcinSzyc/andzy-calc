@@ -1,0 +1,10 @@
+
+body {
+    background-color: gainsboro;
+}
+
+.product-head-list {
+    font-size: large;
+    font-style: oblique;
+    font-weight: bold;
+}
