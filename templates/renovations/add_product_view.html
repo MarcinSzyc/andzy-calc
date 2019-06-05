@@ -1,0 +1,106 @@
+{% extends 'renovations/layout.html' %}
+{% load crispy_forms_tags %}
+{% block renovations %}
+    {% if messages %}
+        {% for message in messages %}
+            <div{% if message.tags == 'error' %}
+                class="alert alert-danger border-warning mt-3" role="alert"
+            {% else %}
+                class="alert alert-success border-success mt-3" role="alert"
+            {% endif %}>{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+    <div class="row justify-content-md-center main-window">
+        <div class="col-sm-6">
+            <div class="card mt-3 bg-light border-danger">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table mt-3">
+                            <thead>
+                            <span style="display: inline">
+                                <h1 style="text-align: center">Room
+                                    <a href="{% url 'renovations:update-room' pk=room_instance.id  %}"
+                                               class="btn btn-outline-danger btn-sm">{{ room_instance }}</a>
+                                    products list:</h1>
+                            </span>
+                            <tr class="product-head-list">
+                                <td>Name</td>
+                                <td>Description</td>
+                                <td>Price</td>
+                                <td>Type</td>
+                                <td>Actions</td>
+                            </tr>
+                            </thead>
+                            {% if room_instance.product.all %}
+                                {% for product in room_instance.product.all %}
+                                    <tr class="product-row">
+                                        <td id="product-name-{{ product.id }}">{{ product.name }}</td>
+                                        <td id="product-description-{{ product.id }}">{{ product.description }}</td>
+                                        <td id="product-price-{{ product.id }}">{{ product.price }}</td>
+                                        <td id="product-type-{{ product.id }}" type="{{ product.type }}">
+                                            {% for item in product_type %}
+                                                {% if item.0 == product.type %}
+                                                    {{ item.1 }}
+                                                {% else %}
+                                                {% endif %}
+                                            {% endfor %}
+                                        </td>
+                                        <td>
+                                            <a href="{% url 'renovations:remove-product-from-room' room_id=room_instance.id product_id=product.id %}"
+                                               class="btn btn-outline-danger btn-sm">Remove from {{ room_instance }}</a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr>
+                                    <td colspan="5"><h1>No Products assigned</h1></td>
+                                </tr>
+                            {% endif %}
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="card mt-3 bg-light border-danger">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table mt-3">
+                            <thead>
+                            <span style="display: inline">
+                                <h1 style="text-align: center">Product List:</h1>
+                            </span>
+                            <tr class="product-head-list">
+                                <td>Name</td>
+                                <td>Description</td>
+                                <td>Price</td>
+                                <td>Type</td>
+                                <td>Actions</td>
+                            </tr>
+                            </thead>
+                            {% for product in all_products %}
+                                <tr class="product-row">
+                                    <td id="product-name-{{ product.id }}">{{ product.name }}</td>
+                                    <td id="product-description-{{ product.id }}">{{ product.description }}</td>
+                                    <td id="product-price-{{ product.id }}">{{ product.price }}</td>
+                                    <td id="product-type-{{ product.id }}" type="{{ product.type }}">
+                                        {% for item in product_type %}
+                                            {% if item.0 == product.type %}
+                                                {{ item.1 }}
+                                            {% else %}
+                                            {% endif %}
+                                        {% endfor %}
+                                    </td>
+                                    <td>
+                                        <a href="{% url 'renovations:add-product-to-room' room_id=room_instance.id product_id=product.id %}"
+                                           class="btn btn-outline-success btn-sm">Add to {{ room_instance }}</a></td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock renovations %}

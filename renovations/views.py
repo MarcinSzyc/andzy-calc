@@ -1,9 +1,9 @@
-from django.views.generic import ListView, View, DetailView
-from renovations.models import Product, Room, Renovation, PRODUCT_TYPE, ROOM_TYPE
+from django.views.generic import ListView, View
+from renovations.models import Renovation, Product, Room, PRODUCT_TYPE, ROOM_TYPE
 from django.views.generic.edit import CreateView, UpdateView
 from django.urls import reverse_lazy
 from django.contrib.messages.views import SuccessMessageMixin
-from django.shortcuts import redirect
+from django.shortcuts import redirect, reverse, render
 from django.contrib import messages
 from renovations.forms import NewRoomForm
 
@@ -58,18 +58,6 @@ class AllRooms(ListView):
         return context
 
 
-class EditRoom(UpdateView):
-    form_class = NewRoomForm
-    template_name = 'renovations/edit_room.html'
-
-    def get_context_data(self, **kwargs):
-        # Call the base implementation first to get a context
-        context = super().get_context_data(**kwargs)
-        context['ROOM_TYPE'] = ROOM_TYPE
-        return context
-
-
-
 class RoomNew(SuccessMessageMixin, CreateView):
     model = Room
     fields = '__all__'
@@ -82,7 +70,17 @@ class RoomUpdate(SuccessMessageMixin, UpdateView):
     model = Room
     form_class = NewRoomForm
     template_name = 'renovations/edit_room.html'
-    success_url = reverse_lazy('renovations:all-rooms')
+
+    def get_success_url(self):
+        return reverse('renovations:update-room', kwargs={'pk': self.kwargs['pk']})
+
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        # Add in the publisher
+        # context['new_product_form'] = NewProductForm
+        context['PRODUCT_TYPE'] = PRODUCT_TYPE
+        return context
     success_message = 'BOOM! Room updated successfully!!'
 
 
@@ -93,3 +91,47 @@ class RoomDelete(View):
         room_instance.delete()
         messages.error(request, "BOOM! Room deleted successfully")
         return redirect('renovations:all-rooms')
+
+
+class AddProductView(View):
+    template = 'renovations/add_product_view.html'
+
+    def get(self, request, room_id):
+        room_instance = Room.objects.get(pk=room_id)
+        all_products = Product.objects.all()
+        product_type = PRODUCT_TYPE
+        return render(request, self.template, locals())
+
+
+class AddProductToRoom(View):
+    template = 'renovations/add_product_view.html'
+
+    def get(self, request, room_id, product_id):
+        room_instance = Room.objects.get(pk=room_id)
+        product_instance = Product.objects.get(pk=product_id)
+        room_instance.product.add(product_instance)
+        messages.success(request, "Product added!")
+        return redirect('renovations:add-product-view', room_id)
+
+
+class RemoveProductFromRoom(View):
+    template = 'renovations/add_product_view.html'
+
+    def get(self, request, room_id, product_id):
+        room_instance = Room.objects.get(pk=room_id)
+        product_instance = Product.objects.get(pk=product_id)
+        messages.error(request, "Product removed!")
+        room_instance.product.remove(product_instance)
+        return redirect('renovations:add-product-view', room_id)
+
+class AllRenovations(ListView):
+    model = Renovation
+    template_name = 'renovations/renovations_list.html'
+
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        # Add in the publisher
+        # context['new_product_form'] = NewProductForm
+        context['PRODUCT_TYPE'] = PRODUCT_TYPE
+        return context
