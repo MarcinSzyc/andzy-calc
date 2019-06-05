@@ -18,10 +18,13 @@
                         <table class="table mt-3">
                             <thead>
                             <span style="display: inline">
-                                <a class="new-product btn btn-outline-info btn-sm" href="#">Add Product</a>
-                                <h1 style="text-align: center">Product List:</h1>
+                                <tr>
+                                    <td><a class="new-product btn btn-outline-info btn-sm" href="#">Add Product</a></td>
+                                    <td colspan="5" style="text-align: center"><h1>Product List:</h1></td>
+                                </tr>
                             </span>
                             <tr class="product-head-list">
+                                <td>ID</td>
                                 <td>Name</td>
                                 <td>Description</td>
                                 <td>Price</td>
@@ -31,6 +34,7 @@
                             </thead>
                             {% for product in object_list %}
                                 <tr class="product-row">
+                                    <td id="product-name-{{ product.id }}">{{ product.id }}</td>
                                     <td id="product-name-{{ product.id }}">{{ product.name }}</td>
                                     <td id="product-description-{{ product.id }}">{{ product.description }}</td>
                                     <td id="product-price-{{ product.id }}">{{ product.price }}</td>
@@ -87,18 +91,6 @@
                     </div>
                 </div>
             `);
-
-            {#function add_box(type, card) {#}
-            {#    console.log("dupa")#}
-            {#    var main_window = $(".main-window")#}
-            {#    if (main_window.hasClass(type)) {#}
-            {#        $(`.${type}-box`).remove()#}
-            {#        main_window.removeClass(type)#}
-            {#    } else {#}
-            {#        main_window.append(card)#}
-            {#        main_window.addClass(type)#}
-            {#    }#}
-
 
             $(".new-product").click(function () {
                 var main_window = $(".main-window");
