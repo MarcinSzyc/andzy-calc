@@ -1,7 +1,7 @@
 from django.urls import path
 from renovations.views import (
     AllProducts, ProductNew, ProductUpdate, ProductDelete, AllRooms,
-    RoomNew, RoomUpdate, RoomDelete, AddProductView, AddProductToRoom, RemoveProductFromRoom)
+    RoomNew, RoomUpdate, RoomDelete, AddProductView, AddProductToRoom, RemoveProductFromRoom, AllRenovations)
 
 app_name = "renovations"
 
