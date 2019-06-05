@@ -12,40 +12,47 @@
         {% endfor %}
     {% endif %}
     <div class="row justify-content-md-center main-window">
-        <div class="col-sm-auto">
+        <div class="col-sm-3">
             <div class="card mt-3 bg-light border-danger">
                 <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table mt-3 table-sm">
-                            <thead>
-                            <h3 style="text-align: center">Products:</h3>
-                            </thead>
-                            <tbody>
-                            {% for item in room.product.all %}
-                                <tr>
-                                    <td>
-                                        <strong><label for="product-name">Name:</label></strong>
-                                        <p id="product-name">{{ item.name }}</p>
-                                    </td>
-                                    <td>
-                                        <strong><label for="product-price">Price:</label></strong>
-                                        <p id="product-price">{{ item.price }}</p>
-                                    </td>
-                                    <td>
-                                        <strong><label for="product-type">Type:</label></strong>
-                                        <p id="product-type">{{ item.type }}</p>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td colspan="3">
-                                        <strong><label for="product-description">Description:</label></strong>
-                                        <p id="product-description">{{ item.description }}</p>
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
+                    <h3 style="text-align: center">Products:</h3>
+                    <a href="{% url 'renovations:add-product-view' room_id=room.id %}"
+                       class="btn btn-outline-danger btn-sm">Add Products to Room</a>
+                        {% for product in room.product.all %}
+                            <div class="card mt-3 bg-light border-danger">
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table mt-3 table-sm">
+                                            <thead>
+                                                <strong><label for="product-type">Name: </label></strong>
+                                                <p id="product-name" style="display: inline"> {{ product.name }}</p>
+                                            </thead>
+                                            <tr>
+                                                <td>
+                                                    <strong><label for="product-price">Price:</label></strong>
+                                                    <p id="product-price">{{ product.price }}</p>
+                                                </td>
+                                                <td>
+                                                    <strong><label for="product-type">Type:</label></strong>
+                                                    {% for item in PRODUCT_TYPE %}
+                                                        {% if item.0 == product.type %}
+                                                            <p id="product-type">{{ item.1 }}</p>
+                                                        {% else %}
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2">
+                                                    <strong><label for="product-description">Description:</label></strong>
+                                                    <p id="product-description">{{ product.description }}</p>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
                 </div>
             </div>
         </div>
@@ -53,35 +60,57 @@
             <div class="card mt-3 bg-light border-danger">
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table mt-3 table-sm">
-                            <thead>
-                            <span>
-                                <h1 style="text-align: center">Room Detail:</h1>
-                            </span>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>
-                                    <strong><label for="room-name">Name:</label></strong>
-                                    <p id="room-name">{{ form.name }}</p>
-                                </td>
-                                <td>
-                                    <strong><label for="room-type">Type:</label></strong>
-                                    <p id="room-name">{{ form.type }}</p>
-                                </td>
-                                <td>
-                                    <strong><label for="room-renovation">Renovation:</label></strong>
-                                    <p id="room-name">{{ form.renovation }}</p>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="3">
-                                    <strong><label for="room-description">Description:</label></strong>
-                                    <p id="room-name">{{ form.description }}</p>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
+                        <form action="{% url 'renovations:update-room' pk=room.id %}" method="POST">
+                            {% csrf_token %}
+                            <table class="table mt-3 table-sm">
+                                <thead>
+                                <span>
+                                    <h1 style="text-align: center">Room Detail:</h1>
+                                </span>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>
+                                        <strong><label for="room-name">Name:</label></strong>
+                                        <p id="room-name">{{ form.name }}</p>
+                                    </td>
+                                    <td>
+                                        <strong><label for="room-type">Type:</label></strong>
+                                        <p id="room-name">{{ form.type }}</p>
+                                    </td>
+                                    <td>
+                                        <strong><label for="room-renovation">Renovation:</label></strong>
+                                        <p id="room-name">{{ form.renovation }}</p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td rowspan="2">
+                                        <strong><label for="room-description">Description:</label></strong>
+                                        <p id="room-name">{{ form.description }}</p>
+                                    </td>
+                                    <td>
+                                        <label for="room-width">Width:</label>
+                                        <p>{{ form.width }}</p>
+                                    </td>
+                                    <td>
+                                        <label for="room-length">Length:</label>
+                                        <p>{{ form.length }}</p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label for="room-height">Height:</label>
+                                        <p>{{ form.height }}</p>
+                                    </td>
+                                    <td>
+                                        <label for="room-tiles-height">Tiles Height:</label>
+                                        <p>{{ form.tiles_height }}</p>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <button type="submit" class="btn btn-info mt-3">Save</button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -123,68 +152,34 @@
         <div class="col-sm-auto">
             <div class="card mt-3 bg-light border-danger">
                 <div class="card-body">
-                    <h3 style="text-align: center">Measurements:</h3>
                     <div class="card mt-3 bg-light border-success">
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table class="table mt-3 table-sm">
                                     <thead>
-                                    <h4 style="text-align: center" colspan="2">Base:</h4>
+                                        <h4 style="text-align: center" colspan="2">Surfaces:</h4>
                                     </thead>
                                     <tbody>
-                                    <tr>
-                                        <td>
-                                            <label for="room-width">Width:</label>
-                                            <p>{{ form.width }}</p>
-                                        </td>
-                                        <td>
-                                            <label for="room-length">Length:</label>
-                                            <p>{{ form.length }}</p>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <label for="room-height">Height:</label>
-                                            <p>{{ form.height }}</p>
-                                        </td>
-                                        <td>
-                                            <label for="room-tiles-height">Tiles Height:</label>
-                                            <p>{{ form.tiles_height }}</p>
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card mt-3 bg-light border-success">
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table mt-3 table-sm">
-                                    <thead>
-                                    <h4 style="text-align: center" colspan="2">Surfaces:</h4>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td>
-                                            <label for="room-walls">Walls:</label>
-                                            <p><input id="room-walls" style="width:5em" type="number"></p>
-                                        </td>
-                                        <td>
-                                            <label for="room-floor">Floor:</label>
-                                            <p><input id="room-floor" style="width:5em" type="number"></p>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <label for="room-ceiling">Ceiling:</label>
-                                            <p><input id="room-ceiling" style="width:5em" type="number"></p>
-                                        </td>
-                                        <td>
-                                            <label for="room-tiles-height">Tiles:</label>
-                                            <p><input id="room-tiles-height" style="width:5em" type="number"></p>
-                                        </td>
-                                    </tr>
+                                        <tr>
+                                            <td>
+                                                <label for="room-walls">Walls:</label>
+                                                <p><input id="room-walls" style="width:5em" type="number"></p>
+                                            </td>
+                                            <td>
+                                                <label for="room-floor">Floor:</label>
+                                                <p><input id="room-floor" style="width:5em" type="number"></p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <label for="room-ceiling">Ceiling:</label>
+                                                <p><input id="room-ceiling" style="width:5em" type="number"></p>
+                                            </td>
+                                            <td>
+                                                <label for="room-tiles-height">Tiles:</label>
+                                                <p><input id="room-tiles-height" style="width:5em" type="number"></p>
+                                            </td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -195,15 +190,16 @@
         </div>
     </div>
     <script>
-        $(document).ready(function (){
+        $(document).ready(function () {
             let room_width = $("#id_width").val();
             let room_length = $("#id_length").val();
             let room_height = $("#id_height").val();
             let room_tiles_height = $("#id_tiles_height").val();
             $("#room-floor").val((room_width * room_length).toFixed(2));
-            $("#room-walls").val((((room_width * room_height)*2)+(room_length*room_height)*2).toFixed(2));
+            $("#room-walls").val((((room_width * room_height) * 2) + (room_length * room_height) * 2).toFixed(2));
             $("#room-ceiling").val((room_width * room_length).toFixed(2));
             $("#room-tiles-height").val((room_width * room_tiles_height).toFixed(2));
+
         })
     </script>
 {% endblock renovations %}
