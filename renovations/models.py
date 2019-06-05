@@ -4,7 +4,8 @@ PRODUCT_TYPE = (
     (1, "Armature"),
     (2, "Tiles"),
     (3, "Paint"),
-    (4, "Other"),
+    (4, "Floor"),
+    (5, "Other"),
 )
 
 ROOM_TYPE = (
