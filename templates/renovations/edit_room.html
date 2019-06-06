@@ -18,45 +18,46 @@
                     <h3 style="text-align: center">Products:</h3>
                     <a href="{% url 'renovations:add-product-view' room_id=room.id %}"
                        class="btn btn-outline-danger btn-sm">Add Products to Room</a>
-                        {% for product in room.product.all %}
-                            <div class="card mt-3 bg-light border-danger">
-                                <div class="card-body">
-                                    <div class="table-responsive">
-                                        <table class="table mt-3 table-sm">
-                                            <thead>
-                                                <strong><label for="product-type">Name: </label></strong>
-                                                <p id="product-name" style="display: inline"> {{ product.name }}</p>
-                                            </thead>
-                                            <tr>
-                                                <td>
-                                                    <strong><label for="product-price">Price:</label></strong>
-                                                    <p id="product-price">{{ product.price }}</p>
-                                                </td>
-                                                <td>
-                                                    <strong><label for="product-type">Type:</label></strong>
-                                                    {% for item in PRODUCT_TYPE %}
-                                                        {% if item.0 == product.type %}
-                                                            <p id="product-type">{{ item.1 }}</p>
-                                                        {% else %}
-                                                        {% endif %}
-                                                    {% endfor %}
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="2">
-                                                    <strong><label for="product-description">Description:</label></strong>
-                                                    <p id="product-description">{{ product.description }}</p>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </div>
+                    {% for product in room.product.all %}
+                        <div class="card mt-3 bg-light border-danger">
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table mt-3 table-sm">
+                                        <thead>
+                                        <strong><label for="product-type">Name: </label></strong>
+                                        <p id="product-name" style="display: inline"> {{ product.name }}</p>
+                                        </thead>
+                                        <tr>
+                                            <td>
+                                                <strong><label for="product-price">Price:</label></strong>
+                                                <p class="product-price"
+                                                   value="{{ product.price }}">{{ product.price }}</p>
+                                            </td>
+                                            <td>
+                                                <strong><label for="product-type">Type:</label></strong>
+                                                {% for item in PRODUCT_TYPE %}
+                                                    {% if item.0 == product.type %}
+                                                        <p class="product-type-{{ item.1 }}">{{ item.1 }}</p>
+                                                    {% else %}
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">
+                                                <strong><label for="product-description">Description:</label></strong>
+                                                <p id="product-description">{{ product.description }}</p>
+                                            </td>
+                                        </tr>
+                                    </table>
                                 </div>
                             </div>
-                        {% endfor %}
+                        </div>
+                    {% endfor %}
                 </div>
             </div>
         </div>
-        <div class="col-sm-auto">
+        <div class="col-sm-6">
             <div class="card mt-3 bg-light border-danger">
                 <div class="card-body">
                     <div class="table-responsive">
@@ -65,8 +66,8 @@
                             <table class="table mt-3 table-sm">
                                 <thead>
                                 <span>
-                                    <h1 style="text-align: center">Room Detail:</h1>
-                                </span>
+                                        <h1 style="text-align: center">Room Detail:</h1>
+                                    </span>
                                 </thead>
                                 <tbody>
                                 <tr>
@@ -107,9 +108,13 @@
                                         <p>{{ form.tiles_height }}</p>
                                     </td>
                                 </tr>
+                                <tr>
+                                    <td colspan="3">
+                                        <button type="submit" class="btn btn-info mt-3">Save</button>
+                                    </td>
+                                </tr>
                                 </tbody>
                             </table>
-                            <button type="submit" class="btn btn-info mt-3">Save</button>
                         </form>
                     </div>
                 </div>
@@ -119,29 +124,40 @@
                     <div class="table-responsive">
                         <table class="table mt-3 table-sm">
                             <thead>
-                            <span>
-                                <h1 style="text-align: center">Costs:</h1>
-                            </span>
+                            <span><h1 style="text-align: center">Costs:</h1></span>
                             </thead>
                             <tbody>
                             <tr>
-                                <td>
-                                    <strong><label for="room-name">Name:</label></strong>
-                                </td>
-                                <td>
-                                    <strong><label for="room-type">Type:</label></strong>
-                                    <p id="room-name">{{ form.type }}</p>
-                                </td>
-                                <td>
-                                    <strong><label for="room-renovation">Renovation:</label></strong>
-                                    <p id="room-name">{{ form.renovation }}</p>
-                                </td>
+                                <td><strong><label for="floor-cost">Floor:</label></strong></td>
+                                <td><input class="floor-cost to-sum" type="number"></td>
                             </tr>
                             <tr>
-                                <td colspan="3">
-                                    <strong><label for="room-description">Description:</label></strong>
-                                    <p id="room-name">{{ form.description }}</p>
-                                </td>
+                                <td><strong><label for="walls-cost">Walls:</label></strong></td>
+                                <td><input class="walls-cost to-sum" type="number"></td>
+                            </tr>
+                            <tr>
+                                <td><strong><label for="ceiling-cost">Ceiling:</label></strong></td>
+                                <td><input class="ceiling-cost to-sum" type="number"></td>
+                            </tr>
+                            <tr>
+                                <td><strong><label for="tiles-cost">Tiles:</label></strong></td>
+                                <td><input class="tiles-cost to-sum" type="number"></td>
+                            </tr>
+                            <tr>
+                                <td><strong><label for="addon-cost">Add ons:</label></strong></td>
+                                <td><input class="addon-cost to-sum" type="number"></td>
+                            </tr>
+                            <tr>
+                                <td><strong><label for="sum-cost">Sum:</label></strong></td>
+                                <td><input class="sum-cost to-total" type="number"></td>
+                            </tr>
+                            <tr>
+                                <td><strong><label for="labor-cost">Labor:</label></strong></td>
+                                <td><input class="labor-cost to-total" type="number"></td>
+                            </tr>
+                            <tr>
+                                <td><strong><label for="total-cost">Total:</label></strong></td>
+                                <td><input class="total-cost" type="number"></td>
                             </tr>
                             </tbody>
                         </table>
@@ -149,7 +165,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-auto">
+        <div class="col-sm-3">
             <div class="card mt-3 bg-light border-danger">
                 <div class="card-body">
                     <div class="card mt-3 bg-light border-success">
@@ -157,29 +173,30 @@
                             <div class="table-responsive">
                                 <table class="table mt-3 table-sm">
                                     <thead>
-                                        <h4 style="text-align: center" colspan="2">Surfaces:</h4>
+                                    <h4 style="text-align: center" colspan="2">Surfaces:</h4>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>
-                                                <label for="room-walls">Walls:</label>
-                                                <p><input id="room-walls" style="width:5em" type="number"></p>
-                                            </td>
-                                            <td>
-                                                <label for="room-floor">Floor:</label>
-                                                <p><input id="room-floor" style="width:5em" type="number"></p>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <label for="room-ceiling">Ceiling:</label>
-                                                <p><input id="room-ceiling" style="width:5em" type="number"></p>
-                                            </td>
-                                            <td>
-                                                <label for="room-tiles-height">Tiles:</label>
-                                                <p><input id="room-tiles-height" style="width:5em" type="number"></p>
-                                            </td>
-                                        </tr>
+                                    <tr>
+                                        <td>
+                                            <label for="room-walls-surface">Walls:</label>
+                                            <p><input class="room-walls-surface" style="width:4em" type="number"></p>
+                                        </td>
+                                        <td>
+                                            <label for="room-floor-surface">Floor:</label>
+                                            <p><input class="room-floor-surface" style="width:4em" type="number"></p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label for="room-ceiling-surface">Ceiling:</label>
+                                            <p><input class="room-ceiling-surface" style="width:4em" type="number"></p>
+                                        </td>
+                                        <td>
+                                            <label for="room-tiles-height-surface">Tiles:</label>
+                                            <p><input class="room-tiles-height-surface" style="width:4em" type="number">
+                                            </p>
+                                        </td>
+                                    </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -191,15 +208,99 @@
     </div>
     <script>
         $(document).ready(function () {
-            let room_width = $("#id_width").val();
-            let room_length = $("#id_length").val();
-            let room_height = $("#id_height").val();
-            let room_tiles_height = $("#id_tiles_height").val();
-            $("#room-floor").val((room_width * room_length).toFixed(2));
-            $("#room-walls").val((((room_width * room_height) * 2) + (room_length * room_height) * 2).toFixed(2));
-            $("#room-ceiling").val((room_width * room_length).toFixed(2));
-            $("#room-tiles-height").val((room_width * room_tiles_height).toFixed(2));
+            function surface_fill() {
+                let room_width = $("#id_width").val();
+                let room_length = $("#id_length").val();
+                let room_height = $("#id_height").val();
+                let room_tiles_height = $("#id_tiles_height").val();
+                $(".room-walls-surface").val((((room_width * room_height) * 2) + (room_length * room_height) * 2).toFixed(2));
+                $(".room-floor-surface").val((room_width * room_length).toFixed(2));
+                $(".room-ceiling-surface").val((room_width * room_length).toFixed(2));
+                $(".room-tiles-height-surface").val((room_width * room_tiles_height).toFixed(2));
+            }
 
+            function armature_cost() {
+                var result = 0;
+                $(".product-type-Armature").each(function () {
+                    result += parseInt($(this).parent().prev().find(".product-price").text())
+                });
+                return result
+            }
+
+            function tiles_cost() {
+                var result = 0;
+                $(".product-type-Tiles").each(function () {
+                    result += parseInt($(this).parent().prev().find(".product-price").text())
+                });
+                return result
+            }
+
+            function paint_cost() {
+                var result = 0;
+                $(".product-type-Paint").each(function () {
+                    result += parseInt($(this).parent().prev().find(".product-price").text())
+                });
+                return result
+            }
+
+            function floor_cost() {
+                var result = 0;
+                $(".product-type-Floor").each(function () {
+                    result += parseInt($(this).parent().prev().find(".product-price").text())
+                });
+                return result
+            }
+
+            function other_cost() {
+                var result = 0;
+                $(".product-type-Other").each(function () {
+                    result += parseInt($(this).parent().prev().find(".product-price").text())
+                });
+                return result
+            }
+
+            function sum_cost() {
+                var sum = 0.00;
+                $(".to-sum").each(function () {
+                    sum += Number($(this).val());
+                });
+                return sum
+            }
+
+            function total_cost() {
+                var sum = 0.00;
+                $(".to-total").each(function () {
+                    sum += Number($(this).val());
+                });
+                return sum
+            }
+
+            function fill_costs() {
+                var floor_cost_field = $(".floor-cost");
+                var walls_cost_field = $(".walls-cost");
+                var ceiling_cost_field = $(".ceiling-cost");
+                var tiles_cost_field = $(".tiles-cost");
+                var addon_cost_field = $(".addon-cost");
+                var sum_cost_field = $(".sum-cost");
+                var labor_cost_field = $(".labor-cost");
+                var total_cost_field = $(".total-cost");
+
+                floor_cost_field.val((floor_cost() * $(".room-floor-surface").val()).toFixed(2));
+                var clear_walls_surface = $(".room-walls-surface").val() - $(".room-tiles-height-surface").val();
+                walls_cost_field.val((paint_cost() * clear_walls_surface).toFixed(2));
+                ceiling_cost_field.val((paint_cost() * $(".room-ceiling-surface").val()).toFixed(2));
+                tiles_cost_field.val((tiles_cost() * $(".room-tiles-height-surface").val()).toFixed(2));
+                addon_cost_field.val(other_cost().toFixed(2));
+                sum_cost_field.val(sum_cost().toFixed(2));
+                labor_cost_field.blur(function () {
+                    var update_value = Number(total_cost_field.val())+Number(labor_cost_field.val());
+                    total_cost_field.val(update_value.toFixed(2))
+                });
+                total_cost_field.val(total_cost().toFixed(2));
+            }
+
+            surface_fill()
+            fill_costs()
         })
     </script>
 {% endblock renovations %}

@@ -8,3 +8,8 @@ body {
     font-style: oblique;
     font-weight: bold;
 }
+
+input.to-sum, input.to-total, input.total-cost {
+    width: 6em;
+    text-align: right;
+}
