@@ -13,10 +13,7 @@ class AllProducts(ListView):
     template_name = 'renovations/product_list.html'
 
     def get_context_data(self, **kwargs):
-        # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
-        # Add in the publisher
-        # context['new_product_form'] = NewProductForm
         context['PRODUCT_TYPE'] = PRODUCT_TYPE
         return context
 
@@ -50,10 +47,7 @@ class AllRooms(ListView):
     template_name = 'renovations/room_list.html'
 
     def get_context_data(self, **kwargs):
-        # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
-        # Add in the publisher
-        # context['new_product_form'] = NewProductForm
         context['ROOM_TYPE'] = ROOM_TYPE
         return context
 
@@ -81,6 +75,7 @@ class RoomUpdate(SuccessMessageMixin, UpdateView):
         # context['new_product_form'] = NewProductForm
         context['PRODUCT_TYPE'] = PRODUCT_TYPE
         return context
+
     success_message = 'BOOM! Room updated successfully!!'
 
 
@@ -124,14 +119,12 @@ class RemoveProductFromRoom(View):
         room_instance.product.remove(product_instance)
         return redirect('renovations:add-product-view', room_id)
 
+
 class AllRenovations(ListView):
     model = Renovation
     template_name = 'renovations/renovations_list.html'
 
     def get_context_data(self, **kwargs):
-        # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
-        # Add in the publisher
-        # context['new_product_form'] = NewProductForm
         context['PRODUCT_TYPE'] = PRODUCT_TYPE
         return context
