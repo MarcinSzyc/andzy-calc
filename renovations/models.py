@@ -16,8 +16,12 @@ ROOM_TYPE = (
 
 class Renovation(models.Model):
     name = models.CharField(max_length=64, null=False)
+    address = models.CharField(max_length=128, null=True)
     description = models.TextField()
-    date = models.DateTimeField()
+    date = models.DateTimeField(auto_now_add=True, blank=True)
+
+    def __str__(self):
+        return self.name
 
 
 class Product(models.Model):
@@ -43,3 +47,15 @@ class Room(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Cost(models.Model):
+    room = models.OneToOneField(Room, on_delete=models.DO_NOTHING)
+    floor = models.IntegerField()
+    walls = models.IntegerField()
+    ceiling = models.IntegerField()
+    tiles = models.IntegerField()
+    addons = models.IntegerField()
+    basic_sum = models.IntegerField()
+    labor = models.IntegerField()
+    total_sum = models.IntegerField()

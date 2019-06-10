@@ -1,0 +1,98 @@
+{% extends 'renovations/layout.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block renovations %}
+    {% if messages %}
+        {% for message in messages %}
+            <div{% if message.tags == 'error' %}
+                class="alert alert-danger border-warning mt-3" role="alert"
+            {% else %}
+                class="alert alert-success border-success mt-3" role="alert"
+            {% endif %}>{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+    <div class="row justify-content-md-center main-window">
+        <div class="col-sm-12">
+            <div class="card mt-3 bg-light border-danger">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table mt-3">
+                            <thead>
+                            <span style="display: inline">
+                                <tr>
+                                    <td><a class="new-renovation btn btn-outline-info btn-sm" href="#">Add Renovation</a></td>
+                                    <td colspan="5" style="text-align: center"><h1>Renovations list:</h1></td>
+                                </tr>
+                            </span>
+                            <tr style="font-size: large; font-style: oblique; font-weight: bold">
+                                <td>ID:</td>
+                                <td>Name</td>
+                                <td>Description</td>
+                                <td>Type</td>
+                                <td>Actions</td>
+                            </tr>
+                            </thead>
+                            {% for renovation in object_list %}
+                                <tr class="room-row">
+                                    <td id="room-id-{{ renovation.id }}">{{ renovation.id }}</td>
+                                    <td id="room-name-{{ renovation.id }}">{{ renovation.name }}</td>
+                                    <td id="room-description-{{ renovation.id }}">{{ renovation.description }}</td>
+                                    <td id="room-date-{{ room.id }}">{{ renovation.date }}</td>
+                                    <td>
+                                        <a class="edit-room btn btn-outline-warning btn-sm"
+                                           href="{% url 'renovations:update-renovation' pk=renovation.id %}">Modify</a>
+                                        <a href="{% url 'renovations:delete-renovation' pk=renovation.id %}"
+                                           class="btn btn-outline-danger btn-sm">Remove</a></td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                </div>
+            </div>`
+        </div>
+    </div>
+    <script>
+        $(document).ready(function () {
+
+            new_renovation_card = $(`
+                <div class="col-sm-auto new-renovation-box">
+                    <div class="card mt-3 border-info bg-light">
+                        <div class="card-body">
+                            <h3 style="text-align: center" class="text-info">Add Renovation</h3>
+                            <form action="{% url 'renovations:new-renovation' %}" method="POST">
+                                {% csrf_token %}
+                                <table style="border-spacing: 10px">
+                                    <tr>
+                                        <td style="vertical-align:top">
+                                            <label for="renovation-name">Name:</label>
+                                            <p id="renovation-name">{{ new_renovation_form.name }}</p>
+                                            <label for="renovation-address">Address:</label>
+                                            <p id="renovation-address">{{ new_renovation_form.address }}</p>
+                                            <label for="room-description">Description:</label>
+                                            <p id="room-description">{{ new_renovation_form.description }}</p>
+                                            <label for="room-date">Date:</label>
+                                            <p id="room-date">{{ new_renovation_form.date }}</p>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <button type="submit" class="btn btn-info mt-3">Save</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            `);
+
+            $(".new-renovation").click(function () {
+                var main_window = $(".main-window");
+                if (main_window.hasClass('new-box-added')) {
+                    $(".new-renovation-box").remove();
+                    main_window.removeClass('new-box-added');
+                } else {
+                    main_window.prepend(new_renovation_card);
+                    main_window.addClass('new-box-added');
+                }
+            })
+
+        });
+    </script>
+{% endblock renovations %}
