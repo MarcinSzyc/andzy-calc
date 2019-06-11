@@ -12,7 +12,7 @@
         {% endfor %}
     {% endif %}
     <div class="row justify-content-md-center main-window">
-        <div class="col-sm-3">
+        <div class="col-md-3">
             <div class="card mt-3 bg-light border-danger">
                 <div class="card-body">
                     <h3 style="text-align: center">Products:</h3>
@@ -57,7 +57,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-6">
+        <div class="col-md-6">
             <div class="card mt-3 bg-light border-danger">
                 <div class="card-body">
                     <div class="table-responsive">
@@ -132,45 +132,52 @@
                             <span><h1 style="text-align: center">Costs:</h1></span>
                             </thead>
                             <tbody>
-                            <tr>
-                                <td><strong><label for="floor-cost">Floor:</label></strong></td>
-                                <td><input class="floor-cost to-sum" type="number"></td>
-                            </tr>
-                            <tr>
-                                <td><strong><label for="walls-cost">Walls:</label></strong></td>
-                                <td><input class="walls-cost to-sum" type="number"></td>
-                            </tr>
-                            <tr>
-                                <td><strong><label for="ceiling-cost">Ceiling:</label></strong></td>
-                                <td><input class="ceiling-cost to-sum" type="number"></td>
-                            </tr>
-                            <tr>
-                                <td><strong><label for="tiles-cost">Tiles:</label></strong></td>
-                                <td><input class="tiles-cost to-sum" type="number"></td>
-                            </tr>
-                            <tr>
-                                <td><strong><label for="addon-cost">Add ons:</label></strong></td>
-                                <td><input class="addon-cost to-sum" type="number"></td>
-                            </tr>
-                            <tr>
-                                <td><strong><label for="sum-cost">Sum:</label></strong></td>
-                                <td><input class="sum-cost to-total" type="number"></td>
-                            </tr>
-                            <tr>
-                                <td><strong><label for="labor-cost">Labor:</label></strong></td>
-                                <td><input class="labor-cost to-total" type="number"></td>
-                            </tr>
-                            <tr>
-                                <td><strong><label for="total-cost">Total:</label></strong></td>
-                                <td><input class="total-cost" type="number"></td>
-                            </tr>
+                            <form action="{% url 'renovations:update-room' pk=room.id %}" method="POST">
+                                <tr>
+                                    <td><strong><label for="floor-cost">Floor:</label></strong></td>
+                                    <td><input class="floor-cost to-sum" type="number"></td>
+                                </tr>
+                                <tr>
+                                    <td><strong><label for="walls-cost">Walls:</label></strong></td>
+                                    <td><input class="walls-cost to-sum" type="number"></td>
+                                </tr>
+                                <tr>
+                                    <td><strong><label for="ceiling-cost">Ceiling:</label></strong></td>
+                                    <td><input class="ceiling-cost to-sum" type="number"></td>
+                                </tr>
+                                <tr>
+                                    <td><strong><label for="tiles-cost">Tiles:</label></strong></td>
+                                    <td><input class="tiles-cost to-sum" type="number"></td>
+                                </tr>
+                                <tr>
+                                    <td><strong><label for="addon-cost">Add ons:</label></strong></td>
+                                    <td><input class="addon-cost to-sum" type="number"></td>
+                                </tr>
+                                <tr>
+                                    <td><strong><label for="sum-cost">Sum:</label></strong></td>
+                                    <td><input class="sum-cost to-total" type="number"></td>
+                                </tr>
+                                <tr>
+                                    <td><strong><label for="labor-cost">Labor:</label></strong></td>
+                                    <td><input class="labor-cost to-total" type="number"></td>
+                                </tr>
+                                <tr>
+                                    <td><strong><label for="total-cost">Total:</label></strong></td>
+                                    <td><input class="total-cost" type="number"></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3">
+                                        <button type="submit" class="btn btn-info mt-3">Save Costs</button>
+                                    </td>
+                                </tr>
+                            </form>
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-sm-3">
+        <div class="col-md-3">
             <div class="card mt-3 bg-light border-danger">
                 <div class="card-body">
                     <div class="card mt-3 bg-light border-success">
