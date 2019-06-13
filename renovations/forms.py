@@ -1,5 +1,5 @@
 from django.forms import ModelForm, Textarea, NumberInput
-from renovations.models import Product, Room, Renovation
+from renovations.models import Product, Room, Renovation, Cost
 
 
 class NewProductForm(ModelForm):
@@ -29,5 +29,14 @@ class NewRenovationForm(ModelForm):
         model = Renovation
         widgets = {
             "description": Textarea(attrs={'rows': 5, 'cols': 20})
+        }
+        exclude = []
+
+
+class NewCostForm(ModelForm):
+    class Meta:
+        model = Cost
+        widgets = {
+
         }
         exclude = []
