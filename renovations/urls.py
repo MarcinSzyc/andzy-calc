@@ -2,7 +2,7 @@ from django.urls import path
 from renovations.views import (
     AllProducts, ProductNew, ProductUpdate, ProductDelete, AllRooms,
     RoomNew, RoomUpdate, RoomDelete, AddProductView, AddProductToRoom, RemoveProductFromRoom,
-    AllRenovations, RenovationAdd, RenovationUpdate, RenovationDelete)
+    AllRenovations, RenovationAdd, RenovationUpdate, RenovationDelete, CostUpdate)
 
 app_name = "renovations"
 
@@ -23,4 +23,5 @@ urlpatterns = [
     path('renovations/new/', RenovationAdd.as_view(), name='new-renovation'),
     path('renovations/update/<int:pk>/', RenovationUpdate.as_view(), name='update-renovation'),
     path('renovations/delete/<int:pk>/', RenovationDelete.as_view(), name='delete-renovation'),
+    path('cost/update/<int:pk>/', CostUpdate.as_view(), name='update-cost'),
 ]
