@@ -69,10 +69,12 @@ class RoomUpdate(View):
         room = Room.objects.get(pk=pk)
         new_room_form = NewRoomForm(instance=room)
         cost = Cost.objects.get(room_id=pk)
+        new_cost_form = NewCostForm(instance=cost)
         return render(request, self.template, locals())
 
-    def post(self, request):
-        filled_form = NewRoomForm(request.POST)
+    def post(self, request, pk):
+        room_instance = Room.objects.get(pk=pk)
+        filled_form = NewRoomForm(request.POST, instance=room_instance)
         if filled_form.is_valid():
             filled_form.save()
             messages.success(request, 'Room updated successfully!!!')
@@ -80,6 +82,7 @@ class RoomUpdate(View):
             error_list = [item for item in filled_form.errors.values()]
             messages.error(request, f'Upps, something went wrong!!! \n {error_list}')
         return redirect(self.request.META.get('HTTP_REFERER'))
+
     # model = Room
     # form_class = NewRoomForm
     # template_name = 'renovations/edit_room.html'
@@ -179,8 +182,11 @@ class CostUpdate(View):
         cost = Cost.objects.get(room_id=pk)
         return render(request, self.template, locals())
 
-    def post(self, request):
-        filled_form = NewCostForm(request.POST)
+    def post(self, request, pk):
+        cost_instance = Cost.objects.get(pk=pk)
+        filled_form = NewCostForm(request.POST, instance=cost_instance)
+        for item in request.POST:
+            print(item)
         if filled_form.is_valid():
             filled_form.save()
             messages.success(request, 'Cost updated successfully!!!')

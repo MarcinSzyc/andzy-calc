@@ -16,7 +16,7 @@
             <div class="card mt-3 bg-light border-danger">
                 <div class="card-body">
                     <h3 style="text-align: center">Products:</h3>
-                        <a href="{% url 'renovations:add-product-view' room_id=room.id %}"
+                    <a href="{% url 'renovations:add-product-view' room_id=room.id %}"
                        class="btn btn-outline-danger btn-sm">Add Products to Room</a>
                     {% for product in room.product.all %}
                         <div class="card mt-3 bg-light border-danger">
@@ -62,7 +62,7 @@
                 <div class="card-body">
                     <div class="table-responsive">
                         <form action="{% url 'renovations:update-room' pk=room.id %}" method="POST">
-                        {% csrf_token %}
+                            {% csrf_token %}
                             <table class="table mt-3 table-sm">
                                 <thead>
                                 <span>
@@ -129,49 +129,18 @@
                     <div class="table-responsive">
                         <table class="table mt-3 table-sm">
                             <thead>
-                            <span><h1 style="text-align: center">Costs:</h1></span>
+                                <span><h1 style="text-align: center">Costs:</h1></span>
                             </thead>
                             <tbody>
                                 <form action="{% url 'renovations:update-cost' pk=cost.id %}" method="POST">
-                            {% csrf_token %}
-                                <tr>
-                                    <td><strong><label for="floor-cost">Floor:</label></strong></td>
-                                    <td><input class="floor-cost to-sum" type="number"></td>
-                                </tr>
-                                <tr>
-                                    <td><strong><label for="walls-cost">Walls:</label></strong></td>
-                                    <td><input class="walls-cost to-sum" type="number"></td>
-                                </tr>
-                                <tr>
-                                    <td><strong><label for="ceiling-cost">Ceiling:</label></strong></td>
-                                    <td><input class="ceiling-cost to-sum" type="number"></td>
-                                </tr>
-                                <tr>
-                                    <td><strong><label for="tiles-cost">Tiles:</label></strong></td>
-                                    <td><input class="tiles-cost to-sum" type="number"></td>
-                                </tr>
-                                <tr>
-                                    <td><strong><label for="addon-cost">Add ons:</label></strong></td>
-                                    <td><input class="addon-cost to-sum" type="number"></td>
-                                </tr>
-                                <tr>
-                                    <td><strong><label for="sum-cost">Sum:</label></strong></td>
-                                    <td><input class="sum-cost to-total" type="number"></td>
-                                </tr>
-                                <tr>
-                                    <td><strong><label for="labor-cost">Labor:</label></strong></td>
-                                    <td><input class="labor-cost to-total" type="number"></td>
-                                </tr>
-                                <tr>
-                                    <td><strong><label for="total-cost">Total:</label></strong></td>
-                                    <td><input class="total-cost" type="number"></td>
-                                </tr>
-                                <tr>
-                                    <td colspan="3">
-                                        <button type="submit" class="btn btn-info mt-3">Save Costs</button>
-                                    </td>
-                                </tr>
-                            </form>
+                                    {% csrf_token %}
+                                    {{ new_cost_form }}
+                                    <tr>
+                                        <td colspan="3">
+                                            <button type="submit" class="btn btn-info mt-3">Save Costs</button>
+                                        </td>
+                                    </tr>
+                                </form>
                             </tbody>
                         </table>
                     </div>
@@ -297,19 +266,25 @@
                 var sum_cost_field = $(".sum-cost");
                 var labor_cost_field = $(".labor-cost");
                 var total_cost_field = $(".total-cost");
+                var db_cost ={{ cost.labor }};
+                var labor_cost_value = 0;
 
-                floor_cost_field.val((floor_cost() * $(".room-floor-surface").val()).toFixed(2));
+                floor_cost_field.attr('value', (floor_cost() * parseFloat($(".room-floor-surface").val())).toFixed(2));
                 var clear_walls_surface = $(".room-walls-surface").val() - $(".room-tiles-height-surface").val();
-                walls_cost_field.val((paint_cost() * clear_walls_surface).toFixed(2));
-                ceiling_cost_field.val((paint_cost() * $(".room-ceiling-surface").val()).toFixed(2));
-                tiles_cost_field.val((tiles_cost() * $(".room-tiles-height-surface").val()).toFixed(2));
-                addon_cost_field.val(other_cost().toFixed(2));
-                sum_cost_field.val(sum_cost().toFixed(2));
+                walls_cost_field.attr('value', (paint_cost() * clear_walls_surface).toFixed(2));
+                ceiling_cost_field.attr('value', (paint_cost() * $(".room-ceiling-surface").val()).toFixed(2));
+                tiles_cost_field.attr('value', (tiles_cost() * $(".room-tiles-height-surface").val()).toFixed(2));
+                addon_cost_field.attr('value', other_cost().toFixed(2));
+                sum_cost_field.attr('value', sum_cost().toFixed(2));
+                labor_cost_field.attr('value', db_cost.toFixed(2));
                 labor_cost_field.blur(function () {
-                    var update_value = Number(total_cost_field.val())+Number(labor_cost_field.val());
-                    total_cost_field.val(update_value.toFixed(2))
+                    if (labor_cost_field.val() != labor_cost_value) {
+                        var update_value = Number(total_cost_field.val()) + Number(labor_cost_field.val());
+                        total_cost_field.attr('value', update_value.toFixed(2))
+                        labor_cost_value = labor_cost_field.val()
+                    }
                 });
-                total_cost_field.val(total_cost().toFixed(2));
+                total_cost_field.attr('value', total_cost().toFixed(2));
             }
 
             surface_fill();
