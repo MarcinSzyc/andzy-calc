@@ -1,11 +1,11 @@
 from django.views.generic import ListView, View
-from renovations.models import Renovation, Product, Room, PRODUCT_TYPE, ROOM_TYPE
+from renovations.models import Renovation, Product, Room, Cost, PRODUCT_TYPE, ROOM_TYPE
 from django.views.generic.edit import CreateView, UpdateView
 from django.urls import reverse_lazy
 from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import redirect, reverse, render
 from django.contrib import messages
-from renovations.forms import NewRoomForm, NewRenovationForm
+from renovations.forms import NewRoomForm, NewRenovationForm, NewCostForm
 
 
 class AllProducts(ListView):
@@ -60,18 +60,37 @@ class RoomNew(SuccessMessageMixin, CreateView):
     success_message = 'BOOM! Room created successfully!!'
 
 
-class RoomUpdate(SuccessMessageMixin, UpdateView):
-    model = Room
-    form_class = NewRoomForm
-    template_name = 'renovations/edit_room.html'
+class RoomUpdate(View):
+    template = 'renovations/edit_room.html'
 
-    def get_success_url(self):
-        return reverse('renovations:update-room', kwargs={'pk': self.kwargs['pk']})
+    def get(self, request, pk):
+        product = Product.objects.all()
+        product_type = PRODUCT_TYPE
+        room = Room.objects.get(pk=pk)
+        new_room_form = NewRoomForm(instance=room)
+        cost = Cost.objects.get(room_id=pk)
+        return render(request, self.template, locals())
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['PRODUCT_TYPE'] = PRODUCT_TYPE
-        return context
+    def post(self, request):
+        filled_form = NewRoomForm(request.POST)
+        if filled_form.is_valid():
+            filled_form.save()
+            messages.success(request, 'Room updated successfully!!!')
+        else:
+            error_list = [item for item in filled_form.errors.values()]
+            messages.error(request, f'Upps, something went wrong!!! \n {error_list}')
+        return redirect(self.request.META.get('HTTP_REFERER'))
+    # model = Room
+    # form_class = NewRoomForm
+    # template_name = 'renovations/edit_room.html'
+    #
+    # def get_success_url(self):
+    #     return reverse('renovations:update-room', kwargs={'pk': self.kwargs['pk']})
+    #
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     context['PRODUCT_TYPE'] = PRODUCT_TYPE
+    #     return context
 
     success_message = 'BOOM! Room updated successfully!!'
 
@@ -137,10 +156,6 @@ class RenovationUpdate(SuccessMessageMixin, UpdateView):
     def get_success_url(self):
         return reverse('renovations:update-renovation', kwargs={'pk': self.kwargs['pk']})
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        return context
-
     success_message = 'BOOM! Room updated successfully!!'
 
 
@@ -151,3 +166,25 @@ class RenovationDelete(View):
         renovation_instance.delete()
         messages.error(request, "BOOM! Renovation deleted successfully")
         return redirect('renovations:all-renovations')
+
+
+class CostUpdate(View):
+    template = 'renovations/edit_room.html'
+
+    def get(self, request, pk):
+        product = Product.objects.all()
+        product_type = PRODUCT_TYPE
+        room_instance = Room.objects.get(pk)
+        new_room_form = NewRoomForm(instance=room_instance)
+        cost = Cost.objects.get(room_id=pk)
+        return render(request, self.template, locals())
+
+    def post(self, request):
+        filled_form = NewCostForm(request.POST)
+        if filled_form.is_valid():
+            filled_form.save()
+            messages.success(request, 'Cost updated successfully!!!')
+        else:
+            error_list = [item for item in filled_form.errors.values()]
+            messages.error(request, f'Upps, something went wrong!!! \n {error_list}')
+        return redirect(self.request.META.get('HTTP_REFERER'))

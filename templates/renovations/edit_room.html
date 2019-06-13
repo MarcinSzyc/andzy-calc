@@ -16,7 +16,7 @@
             <div class="card mt-3 bg-light border-danger">
                 <div class="card-body">
                     <h3 style="text-align: center">Products:</h3>
-                    <a href="{% url 'renovations:add-product-view' room_id=room.id %}"
+                        <a href="{% url 'renovations:add-product-view' room_id=room.id %}"
                        class="btn btn-outline-danger btn-sm">Add Products to Room</a>
                     {% for product in room.product.all %}
                         <div class="card mt-3 bg-light border-danger">
@@ -35,7 +35,7 @@
                                             </td>
                                             <td>
                                                 <strong><label for="product-type">Type:</label></strong>
-                                                {% for item in PRODUCT_TYPE %}
+                                                {% for item in product_type %}
                                                     {% if item.0 == product.type %}
                                                         <p class="product-type-{{ item.1 }}">{{ item.1 }}</p>
                                                     {% else %}
@@ -62,7 +62,7 @@
                 <div class="card-body">
                     <div class="table-responsive">
                         <form action="{% url 'renovations:update-room' pk=room.id %}" method="POST">
-                            {% csrf_token %}
+                        {% csrf_token %}
                             <table class="table mt-3 table-sm">
                                 <thead>
                                 <span>
@@ -73,44 +73,44 @@
                                 <tr>
                                     <td>
                                         <strong><label for="room-name">Name:</label></strong>
-                                        <p id="room-name">{{ form.name }}</p>
+                                        <p id="room-name">{{ new_room_form.name }}</p>
                                     </td>
                                     <td>
                                         <strong><label for="room-type">Type:</label></strong>
-                                        <p id="room-name">{{ form.type }}</p>
+                                        <p id="room-name">{{ new_room_form.type }}</p>
                                     </td>
                                     <td>
                                         <strong><label for="room-renovation">Renovation:</label></strong>
-                                        <p id="room-name">{{ form.renovation }}</p>
+                                        <p id="room-name">{{ new_room_form.renovation }}</p>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td rowspan="2">
                                         <strong><label for="room-description">Description:</label></strong>
-                                        <p id="room-name">{{ form.description }}</p>
+                                        <p id="room-name">{{ new_room_form.description }}</p>
                                     </td>
                                     <td>
                                         <label for="room-width">Width:</label>
-                                        <p>{{ form.width }}</p>
+                                        <p>{{ new_room_form.width }}</p>
                                     </td>
                                     <td>
                                         <label for="room-length">Length:</label>
-                                        <p>{{ form.length }}</p>
+                                        <p>{{ new_room_form.length }}</p>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
                                         <label for="room-height">Height:</label>
-                                        <p>{{ form.height }}</p>
+                                        <p>{{ new_room_form.height }}</p>
                                     </td>
                                     <td>
                                         <label for="room-tiles-height">Tiles Height:</label>
-                                        <p>{{ form.tiles_height }}</p>
+                                        <p>{{ new_room_form.tiles_height }}</p>
                                     </td>
                                 </tr>
                                 <tr style="display: none">
                                     <td>
-                                        <p>{{ form.product }}</p>
+                                        <p>{{ new_room_form.product }}</p>
                                     </td>
                                 </tr>
                                 <tr>
@@ -132,7 +132,8 @@
                             <span><h1 style="text-align: center">Costs:</h1></span>
                             </thead>
                             <tbody>
-                            <form action="{% url 'renovations:update-room' pk=room.id %}" method="POST">
+                                <form action="{% url 'renovations:update-cost' pk=cost.id %}" method="POST">
+                            {% csrf_token %}
                                 <tr>
                                     <td><strong><label for="floor-cost">Floor:</label></strong></td>
                                     <td><input class="floor-cost to-sum" type="number"></td>
@@ -311,8 +312,8 @@
                 total_cost_field.val(total_cost().toFixed(2));
             }
 
-            surface_fill()
-            fill_costs()
+            surface_fill();
+            fill_costs();
         })
     </script>
 {% endblock renovations %}
