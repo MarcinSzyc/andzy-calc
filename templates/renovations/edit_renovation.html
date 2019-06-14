@@ -19,30 +19,17 @@
                             {% csrf_token %}
                             <table class="table mt-3 table-sm">
                                 <thead>
-                                <span>
+                                    <span>
                                         <h1 style="text-align: center">Renovation Detail:</h1>
                                     </span>
                                 </thead>
                                 <tbody>
-                                {{ form |crispy }}
-    {#                            <tr>#}
-    {#                                <td>#}
-    {#                                    <strong><label for="room-name">Name:</label></strong>#}
-    {#                                    <p id="room-name">{{ form.name }}</p>#}
-    {#                                </td>#}
-    {#                                <td>#}
-    {#                                    <strong><label for="room-type">Address:</label></strong>#}
-    {#                                    <p id="room-name">{{ form.address }}</p>#}
-    {#                                </td>#}
-    {#                                <td>#}
-    {#                                    <strong><label for="room-renovation">Description:</label></strong>#}
-    {#                                    <p id="room-name">{{ form.description }}</p>#}
-    {#                                </td>#}
-    {#                                <td rowspan="2">#}
-    {#                                    <strong><label for="room-description">Date:</label></strong>#}
-    {#                                    <p id="room-name">{{ form.date }}</p>#}
-    {#                                </td>#}
-    {#                            </tr>#}
+                                    {{ form |crispy }}
+                                    <tr>
+                                        <td colspan="3">
+                                            <button type="submit" class="btn btn-info mt-3">Save Renovation</button>
+                                        </td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </form>
@@ -50,26 +37,57 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-6">
-            <div class="card mt-3 bg-light border-danger">
-                <div class="card-body">
-                    <div class="table-responsive">
-                        {% csrf_token %}
-                        <table class="table mt-3 table-sm">
-                            <thead>
-                            <span>
-                                    <h1 style="text-align: center">Rooms:</h1>
-                                </span>
-                            </thead>
-                            <tbody>
-                            {% for room in renovation.room_set.all %}
-                                {{ room.name }}
-                                {{ room.name }}
-                            {% endfor %}
-                            </tbody>
+        <div class="col-sm-8">
+            <div class="row justify-content-md-center main-window">
+                {% for room in renovation.room_set.all %}
+                    <div class="card mt-3 mr-3 bg-light border-success" style="width: 20rem;">
+                        <div class="card-header">
+                        <table>
+                            <tr>
+                                <td>{{ room }}</td>
+                                <td colspan="3" style="text-align: center">
+                                    {% for item in ROOM_TYPE %}
+                                        {% if item.0 == room.type %}
+                                            Type: {{ item.1 }}
+                                        {% else %}
+                                        {% endif %}
+                                    {% endfor %}
+                                </td>
+                            </tr>
                         </table>
+                        </div>
+                        <div class="card-body">
+                            <table>
+                                <thead>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th>Basic Cost</th>
+                                        <th>Labor Cost</th>
+                                        <th>Total Cost</th>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ room.cost.basic_sum }}</td>
+                                        <td>{{ room.cost.labor }}</td>
+                                        <td>{{ room.cost.total_sum }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="3">Description</th>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3">Description: {{ room.description }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="card-footer text-muted">
+                            <a class="edit-room btn btn-outline-warning btn-sm"
+                               href="{% url 'renovations:update-room' pk=room.id %}">Modify</a>
+                            <a href="{% url 'renovations:delete-room' pk=room.id %}"
+                               class="btn btn-outline-danger btn-sm">Remove</a></td>
+                        </div>
                     </div>
-                </div>
+                {% endfor %}
             </div>
         </div>
     </div>

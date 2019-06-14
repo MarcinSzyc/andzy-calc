@@ -52,12 +52,23 @@ class AllRooms(ListView):
         return context
 
 
-class RoomNew(SuccessMessageMixin, CreateView):
-    model = Room
-    fields = '__all__'
-    # template_name = 'renovations/products_view.html'
-    success_url = reverse_lazy('renovations:all-rooms')
-    success_message = 'BOOM! Room created successfully!!'
+class RoomNew(View):
+
+    def post(self, request):
+        filled_form = NewRoomForm(request.POST)
+        if filled_form.is_valid():
+            filled_form.save()
+            new_cost = Cost.objects.create()
+            new_room = Room.objects.last()
+            new_room.cost = new_cost
+            new_room.save()
+            messages.success(request, 'Room created successfully!!!')
+        else:
+            error_list = [item for item in filled_form.errors.values()]
+            messages.error(request, f'Upps, something went wrong!!! \n {error_list}')
+        return redirect(self.request.META.get('HTTP_REFERER'))
+
+    success_message = 'BOOM! Room updated successfully!!'
 
 
 class RoomUpdate(View):
@@ -68,7 +79,7 @@ class RoomUpdate(View):
         product_type = PRODUCT_TYPE
         room = Room.objects.get(pk=pk)
         new_room_form = NewRoomForm(instance=room)
-        cost = Cost.objects.get(room_id=pk)
+        cost = room.cost
         new_cost_form = NewCostForm(instance=cost)
         return render(request, self.template, locals())
 
@@ -82,20 +93,6 @@ class RoomUpdate(View):
             error_list = [item for item in filled_form.errors.values()]
             messages.error(request, f'Upps, something went wrong!!! \n {error_list}')
         return redirect(self.request.META.get('HTTP_REFERER'))
-
-    # model = Room
-    # form_class = NewRoomForm
-    # template_name = 'renovations/edit_room.html'
-    #
-    # def get_success_url(self):
-    #     return reverse('renovations:update-room', kwargs={'pk': self.kwargs['pk']})
-    #
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     context['PRODUCT_TYPE'] = PRODUCT_TYPE
-    #     return context
-
-    success_message = 'BOOM! Room updated successfully!!'
 
 
 class RoomDelete(View):
@@ -143,6 +140,11 @@ class AllRenovations(ListView):
     model = Renovation
     template_name = 'renovations/list_renovation.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['ROOM_TYPE'] = ROOM_TYPE
+        return context
+
 
 class RenovationAdd(SuccessMessageMixin, CreateView):
     model = Renovation
@@ -159,7 +161,12 @@ class RenovationUpdate(SuccessMessageMixin, UpdateView):
     def get_success_url(self):
         return reverse('renovations:update-renovation', kwargs={'pk': self.kwargs['pk']})
 
-    success_message = 'BOOM! Room updated successfully!!'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['ROOM_TYPE'] = ROOM_TYPE
+        return context
+
+    success_message = 'BOOM! Renovation updated successfully!!'
 
 
 class RenovationDelete(View):

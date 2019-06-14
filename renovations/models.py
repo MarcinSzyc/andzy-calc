@@ -35,37 +35,28 @@ class Product(models.Model):
         return self.name
 
 
+class Cost(models.Model):
+    floor = models.FloatField(default=0)
+    walls = models.FloatField(default=0)
+    ceiling = models.FloatField(default=0)
+    tiles = models.FloatField(default=0)
+    addons = models.FloatField(default=0)
+    basic_sum = models.FloatField(default=0)
+    labor = models.FloatField(default=0)
+    total_sum = models.FloatField(default=0)
+
+
 class Room(models.Model):
     name = models.CharField(max_length=64, null=False)
     description = models.TextField()
     type = models.IntegerField(choices=ROOM_TYPE)
-    width = models.FloatField()
-    length = models.FloatField()
-    height = models.FloatField()
-    tiles_height = models.FloatField(blank=True)
+    width = models.FloatField(default=0)
+    length = models.FloatField(default=0)
+    height = models.FloatField(default=0)
+    tiles_height = models.FloatField(default=0, blank=True, null=True)
     renovation = models.ForeignKey(Renovation, on_delete=models.DO_NOTHING, null=True, blank=True)
     product = models.ManyToManyField(Product, blank=True)
+    cost = models.OneToOneField(Cost, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return self.name
-
-
-class Cost(models.Model):
-    room = models.OneToOneField(Room, on_delete=models.DO_NOTHING)
-    floor = models.IntegerField(default=0)
-    walls = models.IntegerField(default=0)
-    ceiling = models.IntegerField(default=0)
-    tiles = models.IntegerField(default=0)
-    addons = models.IntegerField(default=0)
-    basic_sum = models.IntegerField(default=0)
-    labor = models.IntegerField(default=0)
-    total_sum = models.IntegerField(default=0)
-
-
-def create_cost(sender, **kwargs):
-    if kwargs["created"]:
-        cost_instance = Cost(room=kwargs["instance"])
-        cost_instance.save()
-
-
-post_save.connect(create_cost, sender=Room)

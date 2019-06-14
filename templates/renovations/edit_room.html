@@ -111,10 +111,11 @@
                                 <tr style="display: none">
                                     <td>
                                         <p>{{ new_room_form.product }}</p>
+                                        <p>{{ new_room_form.cost }}</p>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td colspan="3">
+                                    <td colspan="2">
                                         <button type="submit" class="btn btn-info mt-3">Save</button>
                                     </td>
                                 </tr>
@@ -132,7 +133,7 @@
                                 <span><h1 style="text-align: center">Costs:</h1></span>
                             </thead>
                             <tbody>
-                                <form action="{% url 'renovations:update-cost' pk=cost.id %}" method="POST">
+                                <form action="{% url 'renovations:update-cost' pk=room.cost.id %}" method="POST">
                                     {% csrf_token %}
                                     {{ new_cost_form }}
                                     <tr>

@@ -46,4 +46,4 @@ class NewCostForm(ModelForm):
             "labor": NumberInput(attrs={'class': 'labor-cost to-total'}),
             "total_sum": NumberInput(attrs={'class': 'total-cost'})
         }
-        exclude = ['room']
+        exclude = []

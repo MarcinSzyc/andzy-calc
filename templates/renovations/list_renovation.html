@@ -28,16 +28,18 @@
                                 <td>ID:</td>
                                 <td>Name</td>
                                 <td>Description</td>
-                                <td>Type</td>
+                                <td>Created</td>
+                                <td>#Rooms</td>
                                 <td>Actions</td>
                             </tr>
                             </thead>
                             {% for renovation in object_list %}
-                                <tr class="room-row">
-                                    <td id="room-id-{{ renovation.id }}">{{ renovation.id }}</td>
-                                    <td id="room-name-{{ renovation.id }}">{{ renovation.name }}</td>
-                                    <td id="room-description-{{ renovation.id }}">{{ renovation.description }}</td>
-                                    <td id="room-date-{{ room.id }}">{{ renovation.date }}</td>
+                                <tr class="renovation-row">
+                                    <td id="renovation-id-{{ renovation.id }}">{{ renovation.id }}</td>
+                                    <td id="renovation-name-{{ renovation.id }}">{{ renovation.name }}</td>
+                                    <td id="renovation-description-{{ renovation.id }}">{{ renovation.description }}</td>
+                                    <td id="renovation-date-{{ renovation.id }}">{{ renovation.date }}</td>
+                                    <td id="renovation-room-number">{{ renovation.room_set.all | length }}</td>
                                     <td>
                                         <a class="edit-room btn btn-outline-warning btn-sm"
                                            href="{% url 'renovations:update-renovation' pk=renovation.id %}">Modify</a>
