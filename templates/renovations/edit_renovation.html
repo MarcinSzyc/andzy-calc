@@ -11,7 +11,7 @@
         {% endfor %}
     {% endif %}
     <div class="row justify-content-md-center main-window">
-        <div class="col-sm-4">
+        <div class="col-sm-5">
             <div class="card mt-3 bg-light border-danger">
                 <div class="card-body">
                     <div class="table-responsive">
@@ -24,7 +24,14 @@
                                     </span>
                                 </thead>
                                 <tbody>
-                                    {{ form |crispy }}
+                                    <tr>
+                                        <td>
+                                            {{ form |crispy }}
+                                        </td>
+                                        <td>
+                                            Renovation Summarized Cost: <strong>{{ total_cost }}</strong>
+                                        </td>
+                                    </tr>
                                     <tr>
                                         <td colspan="3">
                                             <button type="submit" class="btn btn-info mt-3">Save Renovation</button>
@@ -37,10 +44,10 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-8">
+        <div class="col-sm-7">
             <div class="row justify-content-md-center main-window">
                 {% for room in renovation.room_set.all %}
-                    <div class="card mt-3 mr-3 bg-light border-success" style="width: 20rem;">
+                    <div class="card mt-3 mr-3 bg-light border-success" style="width: 19rem;">
                         <div class="card-header">
                         <table>
                             <tr>

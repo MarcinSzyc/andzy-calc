@@ -6,6 +6,7 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import redirect, reverse, render
 from django.contrib import messages
 from renovations.forms import NewRoomForm, NewRenovationForm, NewCostForm
+from functools import reduce
 
 
 class AllProducts(ListView):
@@ -164,6 +165,9 @@ class RenovationUpdate(SuccessMessageMixin, UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['ROOM_TYPE'] = ROOM_TYPE
+        context['total_cost'] = round(
+            reduce((lambda x, y: x + y), [room.cost.total_sum for room in Renovation.objects.get(
+                pk=self.kwargs['pk']).room_set.all()]), 2)
         return context
 
     success_message = 'BOOM! Renovation updated successfully!!'
