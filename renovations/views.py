@@ -7,7 +7,9 @@ from django.shortcuts import redirect, reverse, render
 from django.contrib import messages
 from renovations.forms import NewRoomForm, NewRenovationForm, NewCostForm
 from functools import reduce
-
+import xlsxwriter
+import io
+from django.http.response import HttpResponse
 
 class AllProducts(ListView):
     model = Product
@@ -205,3 +207,19 @@ class CostUpdate(View):
             error_list = [item for item in filled_form.errors.values()]
             messages.error(request, f'Upps, something went wrong!!! \n {error_list}')
         return redirect(self.request.META.get('HTTP_REFERER'))
+
+
+class Excel(View):
+    def get(self, request, pk):
+        output = io.BytesIO()
+        workbook = xlsxwriter.Workbook(output, {'in_memory': True})
+        worksheet_renovation = workbook.add_worksheet('renovations')
+        
+        workbook.close()
+        output.seek(0)
+        response = HttpResponse(output.read(),
+                                content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+        response['Content-Disposition'] = f"attachment; filename=Renovation.xlsx"
+        output.close()
+        return response
+

@@ -20,7 +20,7 @@
                             <thead>
                             <span style="display: inline">
                                 <tr>
-                                    <td><a class="new-renovation btn btn-outline-info btn-sm" href="#">Add Renovation</a></td>
+                                    <a class="new-renovation btn btn-outline-info btn-sm" href="#">Add Renovation</a>
                                     <td colspan="5" style="text-align: center"><h1>Renovations list:</h1></td>
                                 </tr>
                             </span>
@@ -44,7 +44,9 @@
                                         <a class="edit-room btn btn-outline-warning btn-sm"
                                            href="{% url 'renovations:update-renovation' pk=renovation.id %}">Modify</a>
                                         <a href="{% url 'renovations:delete-renovation' pk=renovation.id %}"
-                                           class="btn btn-outline-danger btn-sm">Remove</a></td>
+                                           class="btn btn-outline-danger btn-sm">Remove</a>
+                                        <a class="edit-room btn btn-outline-info btn-sm" href="{% url 'renovations:excel-export' pk=renovation.id %}">Export to Excel</a>
+                                    </td>
                                 </tr>
                             {% endfor %}
                         </table>
