@@ -20,11 +20,11 @@
                             <thead>
                             <span style="display: inline">
                                 <tr>
-                                    <a class="new-renovation btn btn-outline-info btn-sm" href="#">Add Renovation</a>
-                                    <td colspan="5" style="text-align: center"><h1>Renovations list:</h1></td>
+                                    <td><a class="new-renovation btn btn-outline-info btn-sm" href="#">Add Renovation</a></td>
+                                    <td colspan="5"><h1 style="text-align: center">Renovations list:</h1></td>
                                 </tr>
                             </span>
-                            <tr style="font-size: large; font-style: oblique; font-weight: bold">
+                            <tr style="font-size: large; font-style: oblique; font-weight: bold; text-align: center">
                                 <td>ID:</td>
                                 <td>Name</td>
                                 <td>Description</td>
@@ -40,7 +40,7 @@
                                     <td id="renovation-description-{{ renovation.id }}">{{ renovation.description }}</td>
                                     <td id="renovation-date-{{ renovation.id }}">{{ renovation.date }}</td>
                                     <td id="renovation-room-number">{{ renovation.room_set.all | length }}</td>
-                                    <td>
+                                    <td >
                                         <a class="edit-room btn btn-outline-warning btn-sm"
                                            href="{% url 'renovations:update-renovation' pk=renovation.id %}">Modify</a>
                                         <a href="{% url 'renovations:delete-renovation' pk=renovation.id %}"
