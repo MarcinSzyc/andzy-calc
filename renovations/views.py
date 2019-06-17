@@ -10,7 +10,7 @@ from functools import reduce
 import xlsxwriter
 import io
 from django.http.response import HttpResponse
-from .excel_utils import renovation_summary
+from renovations.excel_utils import renovation_summary, renovation_room_cost
 
 
 class AllProducts(ListView):
@@ -214,21 +214,17 @@ class CostUpdate(View):
 class Excel(View):
     def get(self, request, pk):
         output = io.BytesIO()
+
         workbook = xlsxwriter.Workbook(output, {'in_memory': True})
-        worksheet_renovation = workbook.add_worksheet('renovation')
-        renovation_summary(worksheet_renovation, workbook, pk)
-        row = 4
-        for room in Renovation.objects.get(pk=pk).room_set.all():
-            worksheet_renovation.write(
-                row,
-                1,
-                room.name
-            )
-            row += 1
+        renovation_worksheet = workbook.add_worksheet('renovation')
+        renovation_summary(renovation_worksheet, workbook, pk)
+        renovation_room_cost(renovation_worksheet, workbook, pk)
         workbook.close()
+
         output.seek(0)
         response = HttpResponse(output.read(),
                                 content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
-        response['Content-Disposition'] = f"attachment; filename=Renovation.xlsx"
+        response['Content-Disposition'] = "attachment; filename=Renovation.xlsx"
         output.close()
+
         return response
