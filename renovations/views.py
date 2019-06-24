@@ -169,9 +169,15 @@ class RenovationUpdate(SuccessMessageMixin, UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['ROOM_TYPE'] = ROOM_TYPE
-        context['total_cost'] = round(
-            reduce((lambda x, y: x + y), [room.cost.total_sum for room in Renovation.objects.get(
-                pk=self.kwargs['pk']).room_set.all()]), 2)
+        renovation_room_list = Renovation.objects.get(pk=self.kwargs['pk']).room_set.all()
+        summarized_total_sum = 0
+        for room in renovation_room_list:
+            if room.cost.total_sum:
+                summarized_total_sum += room.cost.total_sum
+        context['total_cost'] = round(summarized_total_sum, 2)
+        # context['total_cost'] = round(
+        #     reduce((lambda x, y: x + y), [room.cost.total_sum for room in renovation_room_list]),
+        #     2) if renovation_room_list.room.cost.total_sum != 0 else 0
         return context
 
     success_message = 'BOOM! Renovation updated successfully!!'
