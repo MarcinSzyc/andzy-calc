@@ -33,8 +33,11 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td colspan="3">
+                                        <td style="text-align: center">
                                             <button type="submit" class="btn btn-info mt-3">Save Renovation</button>
+                                        </td>
+                                        <td style="text-align: center">
+                                            <a class="new-room btn btn-outline-info btn-sm mt-3" href="#">Add Room</a>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -45,7 +48,7 @@
             </div>
         </div>
         <div class="col-sm-7">
-            <div class="row justify-content-md-center main-window">
+            <div class="row justify-content-md-center">
                 {% for room in renovation.room_set.all %}
                     <div class="card mt-3 mr-3 bg-light border-success" style="width: 19rem;">
                         <div class="card-header">
@@ -98,4 +101,58 @@
             </div>
         </div>
     </div>
+    <script>
+        $(document).ready(function () {
+
+            var new_room_card = $(`
+                <div class="col-sm-auto new-room-box">
+                    <div class="card mt-3 border-info bg-light">
+                        <div class="card-body">
+                            <h3 style="text-align: center" class="text-info">Add Room</h3>
+                            <form action="{% url 'renovations:new-room' %}" method="POST">
+                                {% csrf_token %}
+                                <table style="border-spacing: 10px">
+                                    <tr>
+                                        <td style="vertical-align:top">
+                                            <label for="room-name">Name:</label>
+                                            <p id="room-name">{{ new_room_form.name }}</p>
+                                            <label for="room-description">Description:</label>
+                                            <p id="room-name">{{ new_room_form.description }}</p>
+                                            <label for="room-type">Type:</label>
+                                            <p id="room-name">{{ new_room_form.type }}</p>
+                                            <label for="room-renovation">Renovation:</label>
+                                            <p id="room-name">{{ new_room_form.renovation }}</p>
+                                        </td>
+                                        <td style="vertical-align:top">
+                                            <label for="room-width">Width:</label>
+                                            <p id="room-name">{{ new_room_form.width }}</p>
+                                            <label for="room-length">Length:</label>
+                                            <p id="room-name">{{ new_room_form.length }}</p>
+                                            <label for="room-height">Height:</label>
+                                            <p id="room-name">{{ new_room_form.height }}</p>
+                                            <label for="room-tiles-height">Tiles Height:</label>
+                                            <p id="room-name">{{ new_room_form.tiles_height }}</p>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <button type="submit" class="btn btn-info mt-3">Save</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            `);
+
+            $(".new-room").click(function () {
+                var main_window = $(".main-window");
+                if (main_window.hasClass('new-box-added')) {
+                    $(".new-room-box").remove();
+                    main_window.removeClass('new-box-added');
+                } else {
+                    main_window.prepend(new_room_card);
+                    main_window.addClass('new-box-added');
+                }
+            })
+
+        });
+    </script>
 {% endblock renovations %}

@@ -15,9 +15,21 @@
         <div class="col-md-3">
             <div class="card mt-3 bg-light border-danger">
                 <div class="card-body">
-                    <h3 style="text-align: center">Products:</h3>
-                    <a href="{% url 'renovations:add-product-view' room_id=room.id %}"
-                       class="btn btn-outline-danger btn-sm">Add Products to Room</a>
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <td>
+                                    <a href="{% url 'renovations:add-product-view' room_id=room.id %}"
+                                    class="btn btn-outline-danger btn-sm">Add Product</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <h3 style="text-align: center">Products:</h3>
+                                </td>
+                            </tr>
+                        </thead>
+                    </table>
                     {% for product in room.product.all %}
                         <div class="card mt-3 bg-light border-danger">
                             <div class="card-body">
@@ -66,8 +78,17 @@
                             <table class="table mt-3 table-sm">
                                 <thead>
                                 <span>
-                                        <h1 style="text-align: center">Room Detail:</h1>
-                                    </span>
+                                    <tr>
+                                        <td style="vertical-align: center" colspan="3"><a class="edit-room btn btn-outline-info btn-sm"
+                                           href="{% url 'renovations:update-renovation' pk=room.renovation.id %}">Renovation view</a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3">
+                                            <h1 style="text-align: center">Room Detail:</h1>
+                                        </td>
+                                    </tr>
+                                </span>
                                 </thead>
                                 <tbody>
                                 <tr>
@@ -115,7 +136,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td colspan="2">
+                                    <td colspan="3">
                                         <button type="submit" class="btn btn-info mt-3">Save</button>
                                     </td>
                                 </tr>
