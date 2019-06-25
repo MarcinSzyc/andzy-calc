@@ -10,6 +10,8 @@
             {% endif %}>{{ message }}</div>
         {% endfor %}
     {% endif %}
+    <div class="row justify-content-md-center new-room-div">
+    </div>
     <div class="row justify-content-md-center main-window">
         <div class="col-sm-5">
             <div class="card mt-3 bg-light border-danger">
@@ -105,7 +107,7 @@
         $(document).ready(function () {
 
             var new_room_card = $(`
-                <div class="col-sm-auto new-room-box">
+                <div class="col-sm-4 new-room-box">
                     <div class="card mt-3 border-info bg-light">
                         <div class="card-body">
                             <h3 style="text-align: center" class="text-info">Add Room</h3>
@@ -143,12 +145,12 @@
             `);
 
             $(".new-room").click(function () {
-                var main_window = $(".main-window");
+                var main_window = $(".new-room-div");
                 if (main_window.hasClass('new-box-added')) {
                     $(".new-room-box").remove();
                     main_window.removeClass('new-box-added');
                 } else {
-                    main_window.prepend(new_room_card);
+                    main_window.append(new_room_card);
                     main_window.addClass('new-box-added');
                 }
             })
