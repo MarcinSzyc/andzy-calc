@@ -10,7 +10,7 @@ from functools import reduce
 import xlsxwriter
 import io
 from django.http.response import HttpResponse
-from renovations.excel_utils import renovation_summary, renovation_room_cost
+from renovations.excel_utils import renovation_summary, renovation_room_cost, renovation_room_summary
 
 
 class AllProducts(ListView):
@@ -225,6 +225,7 @@ class Excel(View):
         renovation_worksheet = workbook.add_worksheet('renovation')
         renovation_summary(renovation_worksheet, workbook, pk)
         renovation_room_cost(renovation_worksheet, workbook, pk)
+        renovation_room_summary(workbook, pk)
         workbook.close()
 
         output.seek(0)
