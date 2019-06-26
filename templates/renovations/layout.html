@@ -29,19 +29,33 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
-                <ul class="navbar-nav">
+                <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
                     <li class="nav-item active">
-                        <a class="nav-link" href="{% url 'renovations:all-renovations' %}">Renovations<span
-                                class="sr-only">(current)</span></a>
+                        <a class="nav-link" href="{% url 'renovations:all-renovations' %}">Renovations</a>
                     </li>
                     <li class="nav-item active">
-                        <a class="nav-link" href="{% url 'renovations:all-rooms' %}">Rooms<span
-                                class="sr-only">(current)</span></a>
+                        <a class="nav-link" href="{% url 'renovations:all-rooms' %}">Rooms</a>
                     </li>
                     <li class="nav-item active">
-                        <a class="nav-link" href="{% url 'renovations:all-products' %}">Products<span
-                                class="sr-only">(current)</span></a>
+                        <a class="nav-link" href="{% url 'renovations:all-products' %}">Products</a>
                     </li>
+                </ul>
+                <ul class="navbar-nav mt-2 mt-lg-0">
+                    <li class="nav-item active">
+                        <a class="nav-link" data-toggle="modal" data-target=".register-modal" href="#">Register</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" data-toggle="modal" data-target=".password-reset-modal" href="#">Reset Password</a>
+                    </li>
+                    {% if user.is_authenticated %}
+                        <li class="nav-item active">
+                            <a class="navbar-brand" href="#">Logout</a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item active">
+                            <a class="navbar-brand" data-toggle="modal" data-target=".login-modal" href="#">Login</a>
+                        </li>
+                    {% endif %}
                 </ul>
             </div>
         </nav>
@@ -52,6 +66,69 @@
     {% block renovations %}{% endblock %}
 </div>
 
+
+<!-- Login Modal -->
+<div class="modal fade login-modal" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Log In</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        {{ authentication_form.as_p }}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Hit it!</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Password reset Modal -->
+<div class="modal fade password-reset-modal" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Reset Password</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        {{ password_reset_form.as_p }}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Hit it!</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Register Modal -->
+<div class="modal fade register-modal" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Register</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        {{ registration_form.as_p }}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Hit it!</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
