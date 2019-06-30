@@ -2,11 +2,14 @@ from django.urls import path
 from renovations.views import (
     AllProducts, ProductNew, ProductUpdate, ProductDelete, AllRooms,
     RoomNew, RoomUpdate, RoomDelete, AddProductView, AddProductToRoom, RemoveProductFromRoom,
-    AllRenovations, RenovationAdd, RenovationUpdate, RenovationDelete, CostUpdate, Excel)
+    AllRenovations, RenovationAdd, RenovationUpdate, RenovationDelete, CostUpdate, Excel, RegisterUser, Login, Logout)
 
 app_name = "renovations"
 
 urlpatterns = [
+    path('login/', Login.as_view(), name='login'),
+    path('logout/', Logout.as_view(), name='logout'),
+    path('register/', RegisterUser.as_view(), name='register'),
     path('products/', AllProducts.as_view(), name='all-products'),
     path('products/new/', ProductNew.as_view(), name='new-product'),
     path('products/update/<int:pk>/', ProductUpdate.as_view(), name='update-product'),

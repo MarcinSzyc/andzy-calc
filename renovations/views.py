@@ -6,11 +6,14 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import redirect, reverse, render
 from django.contrib import messages
 from renovations.forms import NewRoomForm, NewRenovationForm, NewCostForm
-from functools import reduce
 import xlsxwriter
 import io
 from django.http.response import HttpResponse
 from renovations.excel_utils import renovation_summary, renovation_room_cost, renovation_room_summary
+from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import authenticate, login, logout
+from .forms import AuthenticationForm
 
 
 class AllProducts(ListView):
@@ -235,3 +238,46 @@ class Excel(View):
         output.close()
 
         return response
+
+
+class RegisterUser(View):
+
+    def post(self, request):
+        filled_form = UserCreationForm(request.POST)
+        if filled_form.is_valid():
+            filled_form.save()
+            messages.success(request, 'User created!')
+            return redirect(self.request.META.get('HTTP_REFERER'))
+        else:
+            error_list = [item for item in filled_form.errors.values()]
+            messages.error(request, f'Upps something went wrong!! \n {error_list}')
+            return redirect(self.request.META.get('HTTP_REFERER'))
+
+
+class Login(View):
+    template = 'general/login.html'
+
+    def post(self, request):
+        filled_form = AuthenticationForm(request.POST)
+        if filled_form.is_valid():
+            username = filled_form.cleaned_data.get('username')
+            password = filled_form.cleaned_data.get('password')
+            user = authenticate(username=username, password=password)
+            if user:
+                messages.success(request, f'Hello {user} !!')
+                login(request, user)
+                return redirect(self.request.META.get('HTTP_REFERER'))
+            else:
+                messages.error(request, 'There is no such username in the database!')
+                return redirect(self.request.META.get('HTTP_REFERER'))
+        else:
+            error_list = [item for item in filled_form.errors.values()]
+            messages.error(request, f'Upps something went wrong!! {error_list}')
+            return redirect(self.request.META.get('HTTP_REFERER'))
+
+
+class Logout(View):
+
+    def get(self, request):
+        logout(request)
+        return redirect('renovations:all-renovations')
