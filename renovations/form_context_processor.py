@@ -1,5 +1,5 @@
-from renovations.forms import NewProductForm, NewRoomForm, NewRenovationForm, NewCostForm
-from django.contrib.auth.forms import AuthenticationForm, PasswordResetForm, UserCreationForm
+from renovations.forms import NewProductForm, NewRoomForm, NewRenovationForm, NewCostForm, AuthenticationForm
+from django.contrib.auth.forms import PasswordResetForm, UserCreationForm
 
 
 def renovations_form_context(request):

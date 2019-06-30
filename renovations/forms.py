@@ -1,5 +1,6 @@
 from django.forms import ModelForm, Textarea, NumberInput, Select
 from renovations.models import Product, Room, Renovation, Cost
+from django import forms
 
 
 class NewProductForm(ModelForm):
@@ -36,7 +37,7 @@ class NewRenovationForm(ModelForm):
 class NewCostForm(ModelForm):
     class Meta:
         model = Cost
-        widgets={
+        widgets = {
             "floor": NumberInput(attrs={'class': 'floor-cost to-sum'}),
             "walls": NumberInput(attrs={'class': 'walls-cost to-sum'}),
             "ceiling": NumberInput(attrs={'class': 'ceiling-cost to-sum'}),
@@ -47,3 +48,8 @@ class NewCostForm(ModelForm):
             "total_sum": NumberInput(attrs={'class': 'total-cost'})
         }
         exclude = []
+
+
+class AuthenticationForm(forms.Form):
+    username = forms.CharField(max_length=64)
+    password = forms.CharField(widget=forms.PasswordInput)
